@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import Layout from '@/share/layout/Layout';
 
 import PageInfo from '../../_components/PageInfo';
@@ -11,10 +13,14 @@ export default async function Opinion() {
         <PageInfo title="회원 의견 관리" path={['회원', '회원 의견 관리']} />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <OpinionSearchForm />
+        <Suspense>
+          <OpinionSearchForm />
+        </Suspense>
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <OpinionList />
+        <Suspense>
+          <OpinionList />
+        </Suspense>
       </Layout.Content.Full>
     </>
   );

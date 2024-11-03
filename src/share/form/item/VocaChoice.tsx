@@ -1,7 +1,7 @@
 'use client';
 
 import { Form, FormItemProps, Radio, Select } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import Label from '@/share/form/item/Label';
 import { useGetVocaList } from '@/share/query/voca/useGetVocaList';
@@ -59,8 +59,8 @@ export default function VocaChoice({
           {data?.data &&
             data?.data.list
               .filter((voca) => {
-                if (status === 'active') return voca.isUse === true;
-                if (status === 'inActive') return voca.isUse === false;
+                if (status === 'active') return voca.isUse;
+                if (status === 'inActive') return !voca.isUse;
                 return true;
               })
               .map((voca) => (

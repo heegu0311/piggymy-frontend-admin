@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense } from 'react';
 
 import CardFilter from '@/app/(afterLogin)/admin/quiz/_components/CardFilter';
 import UpdateVoca from '@/app/(afterLogin)/admin/quiz/vocaManagement/_components/UpdateVoca';
@@ -28,7 +28,9 @@ export default async function VocaUpdate({
         />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <CardFilter />
+        <Suspense>
+          <CardFilter />
+        </Suspense>
       </Layout.Content.Full>
       <Layout.Content.Left>
         <VocaSearchList searchParams={params} />

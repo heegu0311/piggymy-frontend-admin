@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense } from 'react';
 
 import PageInfo from '@/app/(afterLogin)/admin/_components/PageInfo';
 import CardFilter from '@/app/(afterLogin)/admin/quiz/_components/CardFilter';
@@ -13,11 +13,15 @@ export default async function UserManagement() {
         <PageInfo title={'기본 정보 관리'} path={['회원', '기본 정보 관리']} />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <CardFilter />
+        <Suspense>
+          <CardFilter />
+        </Suspense>
       </Layout.Content.Full>
 
       <Layout.Content.Left>
-        <UserSearchList />
+        <Suspense>
+          <UserSearchList />
+        </Suspense>
       </Layout.Content.Left>
       <Layout.Content.Right>
         <SegmentControlContainer />

@@ -12,7 +12,6 @@ type Story = StoryObj<typeof Dropdown>;
 
 export const DefaultDropdown: Story = {
   args: {
-    name: 'item',
     options: [
       { inputVal: 'item1', summary: 'item1' },
       { inputVal: 'item2', summary: 'item2' },

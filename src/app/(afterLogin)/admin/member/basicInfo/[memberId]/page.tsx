@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense } from 'react';
 
 import PageInfo from '@/app/(afterLogin)/admin/_components/PageInfo';
 import MemberSearchList from '@/app/(afterLogin)/admin/member/basicInfo/_components/MemberSearchList';
@@ -16,7 +16,9 @@ export default async function MemberManagement() {
         />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <CardFilter />
+        <Suspense>
+          <CardFilter />
+        </Suspense>
       </Layout.Content.Full>
 
       <Layout.Content.Left>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense } from 'react';
 
 import CardFilter from '@/app/(afterLogin)/admin/quiz/_components/CardFilter';
 import QuizSearchList from '@/app/(afterLogin)/admin/quiz/quizManagement/_components/QuizSearchList';
@@ -28,7 +28,9 @@ export default async function QuizUpdate({
         />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <CardFilter />
+        <Suspense>
+          <CardFilter />
+        </Suspense>
       </Layout.Content.Full>
 
       <Layout.Content.Left>

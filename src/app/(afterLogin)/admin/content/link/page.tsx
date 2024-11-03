@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import Layout from '@/share/layout/Layout';
 
 import LinkList from './_components/LinkList';
@@ -11,10 +13,14 @@ export default async function Link() {
         <LinkPageInfo />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <LinkSearchForm />
+        <Suspense>
+          <LinkSearchForm />
+        </Suspense>
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <LinkList />
+        <Suspense>
+          <LinkList />
+        </Suspense>
       </Layout.Content.Full>
     </>
   );

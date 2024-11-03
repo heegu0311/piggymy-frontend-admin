@@ -35,11 +35,14 @@ export function useCreateGreeting({ onSuccess }: UseCreateGreetingProps) {
     mutationFn: createGreeting,
     onSuccess: () => {
       onSuccess && onSuccess();
+      console.log(1);
+
       notification.success({
         message: '그리팅 메시지 생성 성공',
       });
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
+      console.log(2);
       if (axios.isAxiosError(error)) {
         notification.error({
           message: '그리팅 메시지 생성 실패',

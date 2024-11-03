@@ -9,7 +9,7 @@ import React from 'react';
 import ReactQueryProvider from '@/app/_component/ReactQueryProvider';
 import ModalProvider from '@/share/modal/ModalProvider';
 
-import CheckAuth from './_component/CheckAuth';
+import { MSWComponent } from './_component/MSWComponent';
 import RecoilRootProvider from './_component/RecoilRootProvider';
 
 const notoSansKr = Noto_Sans_KR({
@@ -29,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={notoSansKr.className}>
+        <MSWComponent />
         <ConfigProvider
           theme={{
             token: { colorLink: 'inherit' },
@@ -49,7 +50,7 @@ export default function RootLayout({
         >
           <RecoilRootProvider>
             <ReactQueryProvider>
-              <CheckAuth />
+              {/* <CheckAuth /> */}
               <AntdRegistry>{children}</AntdRegistry>
             </ReactQueryProvider>
             <ModalProvider />

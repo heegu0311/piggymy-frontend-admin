@@ -38,7 +38,7 @@ export default function LoginForm() {
             <input
               type="text"
               className="mb-3 w-full rounded-3xl border-2 border-gray-5 p-2 pl-4"
-              placeholder="Id"
+              placeholder="ID"
               name="id"
             />
           </div>
@@ -46,7 +46,7 @@ export default function LoginForm() {
             <input
               type="text"
               className="mb-3 w-full rounded-3xl border-2 border-gray-5 p-2 pl-4"
-              placeholder="Pw"
+              placeholder="PW"
               name="password"
             />
           </div>

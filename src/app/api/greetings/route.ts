@@ -1,18 +1,30 @@
-import dayjs from 'dayjs';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
+import { db } from '@/app/db/firebaseConfig';
+
 export async function GET() {
-  return NextResponse.json({
-    exposureDuration: [dayjs().format(), dayjs().add(1, 'M').format()],
-    message: '안녕하세요 피기미입니다!',
-  });
+  const querySnapshot = await getDocs(collection(db, 'greetings'));
+  const greetings = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return NextResponse.json(greetings[0]);
 }
 
-export async function POST(request: Request) {
-  const { exposureDuration, message } = await request.json();
+export async function PUT(request: Request) {
+  const { id, exposureDuration, message } = await request.json();
+
+  const userDocRef = doc(db, 'greetings', id);
+
+  await updateDoc(userDocRef, {
+    exposureDuration,
+    message,
+  });
 
   return NextResponse.json({
-    message,
     exposureDuration,
+    message,
   });
 }

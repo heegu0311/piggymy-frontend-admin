@@ -6,18 +6,21 @@ import { Request, Response } from '@/type/apiType';
 
 import axiosInstance from '../axios';
 
-interface CreateGreetingRequestJson {
+interface UpdateGreetingRequestJson {
+  id: string;
   message: string;
   exposureDuration: [string, string];
 }
 
-export const createGreeting = async (
-  greetingData: Request<CreateGreetingRequestJson>,
+export const updateGreeting = async (
+  greetingData: Request<UpdateGreetingRequestJson>,
 ) => {
-  const { message, exposureDuration } = greetingData.data;
-  const response = await axiosInstance.post<CreateGreetingRequestJson>(
+  const { id, message, exposureDuration } = greetingData.data;
+
+  const response = await axiosInstance.put<UpdateGreetingRequestJson>(
     `/api/greetings`,
     {
+      id,
       message,
       exposureDuration,
     },
@@ -26,25 +29,24 @@ export const createGreeting = async (
   return response.data;
 };
 
-interface UseCreateGreetingProps {
+interface UseUpdateGreetingProps {
   onSuccess?: () => void;
 }
 
-export function useCreateGreeting({ onSuccess }: UseCreateGreetingProps) {
+export function useUpdateGreeting({ onSuccess }: UseUpdateGreetingProps) {
   return useMutation({
-    mutationFn: createGreeting,
+    mutationFn: updateGreeting,
     onSuccess: () => {
       onSuccess && onSuccess();
 
       notification.success({
-        message: '그리팅 메시지 생성 성공',
+        message: '그리팅 메시지 수정 성공',
       });
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
-      console.log(2);
       if (axios.isAxiosError(error)) {
         notification.error({
-          message: '그리팅 메시지 생성 실패',
+          message: '그리팅 메시지 수정 실패',
           description: `${error.response?.data.code}: ${error.response?.data.message}`,
         });
       }

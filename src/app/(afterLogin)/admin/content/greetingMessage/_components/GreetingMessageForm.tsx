@@ -3,33 +3,46 @@
 import { DatePicker, Form, Input } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { useEffect } from 'react';
 
 import Label from '@/share/form/item/Label';
-import { useCreateGreeting } from '@/share/query/greeting/useCreateGreeting';
+import { useUpdateGreeting } from '@/share/query/greeting/useCreateGreeting';
 import { useGetGreeting } from '@/share/query/greeting/useGetGreeting';
 import Button from '@/share/ui/button/Button';
 import ContentBox from '@/share/ui/content-box/ContentBox';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 interface GreetingMessageFormValue {
+  id: string;
   exposureDuration: [string, string];
   message: string;
 }
 
 export default function GreetingMessageForm() {
   const [form] = useForm();
-  const { data: createData, mutate } = useCreateGreeting({
+  const { data: updateData, mutate } = useUpdateGreeting({
     onSuccess: () => form.resetFields(),
   });
 
   const { data } = useGetGreeting();
 
+  const convertTimezone = (date: string) => {
+    const converted = dayjs.utc(date);
+    converted.tz('Asia/Seoul');
+    return converted;
+  };
+
   const handleFinish = async (formValue: GreetingMessageFormValue) => {
     mutate({
       data: {
+        id: data!.data.id,
         message: formValue.message,
         exposureDuration: formValue.exposureDuration,
       },
@@ -38,8 +51,9 @@ export default function GreetingMessageForm() {
 
   useEffect(() => {
     form.setFieldsValue({
+      id: data?.data.id,
       exposureDuration: data?.data.exposureDuration.map((d) => {
-        return dayjs(d.substring(0, 10));
+        return convertTimezone(d);
       }),
       message: data?.data.message,
     });
@@ -47,12 +61,13 @@ export default function GreetingMessageForm() {
 
   useEffect(() => {
     form.setFieldsValue({
-      exposureDuration: createData?.exposureDuration.map((d) => {
-        return dayjs(d.substring(0, 10)).add(1, 'd');
+      id: updateData?.id,
+      exposureDuration: updateData?.exposureDuration.map((d) => {
+        return convertTimezone(d);
       }),
-      message: createData?.message,
+      message: updateData?.message,
     });
-  }, [createData]);
+  }, [updateData]);
 
   return (
     <ContentBox className={'flex h-full items-start'}>

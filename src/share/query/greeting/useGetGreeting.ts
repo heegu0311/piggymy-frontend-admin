@@ -3,8 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../axios';
 
 interface GetGreetingResponse {
-  message: string;
+  id: string;
   exposureDuration: string[];
+  message: string;
 }
 
 export const getGreeting = async () => {

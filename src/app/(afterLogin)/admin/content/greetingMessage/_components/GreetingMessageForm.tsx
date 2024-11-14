@@ -2,10 +2,12 @@
 
 import { DatePicker, Form, Input } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
 
 import Label from '@/share/form/item/Label';
 import { useCreateGreeting } from '@/share/query/greeting/useCreateGreeting';
+import { useGetGreeting } from '@/share/query/greeting/useGetGreeting';
 import Button from '@/share/ui/button/Button';
 import ContentBox from '@/share/ui/content-box/ContentBox';
 
@@ -13,23 +15,44 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 interface GreetingMessageFormValue {
-  exposureDuration: Dayjs[];
+  exposureDuration: [string, string];
   message: string;
 }
 
 export default function GreetingMessageForm() {
   const [form] = useForm();
-  const { mutate } = useCreateGreeting({ onSuccess: () => form.resetFields() });
+  const { data: createData, mutate } = useCreateGreeting({
+    onSuccess: () => form.resetFields(),
+  });
 
-  const handleFinish = (formValue: GreetingMessageFormValue) => {
+  const { data } = useGetGreeting();
+
+  const handleFinish = async (formValue: GreetingMessageFormValue) => {
     mutate({
       data: {
         message: formValue.message,
-        exposureStartDate: formValue.exposureDuration[0],
-        exposureEndDate: formValue.exposureDuration[1],
+        exposureDuration: formValue.exposureDuration,
       },
     });
   };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      exposureDuration: data?.data.exposureDuration.map((d) => {
+        return dayjs(d.substring(0, 10));
+      }),
+      message: data?.data.message,
+    });
+  }, [data]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      exposureDuration: createData?.exposureDuration.map((d) => {
+        return dayjs(d.substring(0, 10)).add(1, 'd');
+      }),
+      message: createData?.message,
+    });
+  }, [createData]);
 
   return (
     <ContentBox className={'flex h-full items-start'}>

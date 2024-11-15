@@ -17,7 +17,7 @@ export const updateGreeting = async (
 ) => {
   const { id, message, exposureDuration } = greetingData.data;
 
-  const response = await axiosInstance.put<UpdateGreetingRequestJson>(
+  const response = await axiosInstance.patch<UpdateGreetingRequestJson>(
     `/api/greetings`,
     {
       id,

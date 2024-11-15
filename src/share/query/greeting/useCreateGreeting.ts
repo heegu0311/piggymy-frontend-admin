@@ -17,7 +17,7 @@ export const updateGreeting = async (
 ) => {
   const { id, message, exposureDuration } = greetingData.data;
 
-  const response = await axiosInstance.patch<UpdateGreetingRequestJson>(
+  const response = await axiosInstance.put<UpdateGreetingRequestJson>(
     `/api/greetings`,
     {
       id,
@@ -30,14 +30,14 @@ export const updateGreeting = async (
 };
 
 interface UseUpdateGreetingProps {
-  onSuccess?: () => void;
+  onSuccess?: (data: UpdateGreetingRequestJson) => void;
 }
 
 export function useUpdateGreeting({ onSuccess }: UseUpdateGreetingProps) {
   return useMutation({
     mutationFn: updateGreeting,
-    onSuccess: () => {
-      onSuccess && onSuccess();
+    onSuccess: (data) => {
+      onSuccess && onSuccess(data);
 
       notification.success({
         message: '그리팅 메시지 수정 성공',

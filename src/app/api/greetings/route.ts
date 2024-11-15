@@ -13,13 +13,10 @@ export async function GET() {
   return NextResponse.json(greetings[0]);
 }
 
-export async function PATCH(request: Request) {
+export async function PUT(request: Request) {
   const { id, exposureDuration, message } = await request.json();
 
-  console.log(1);
-
   const userDocRef = doc(db, 'greetings', id);
-  console.log(2);
 
   await updateDoc(userDocRef, {
     exposureDuration,

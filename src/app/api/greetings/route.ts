@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 
 import { db } from '@/app/db/firebaseConfig';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const querySnapshot = await getDocs(collection(db, 'greetings'));
   const greetings = querySnapshot.docs.map((doc) => ({

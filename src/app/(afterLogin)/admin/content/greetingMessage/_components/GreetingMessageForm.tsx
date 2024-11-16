@@ -27,16 +27,20 @@ interface GreetingMessageFormValue {
 
 export default function GreetingMessageForm() {
   const [form] = useForm();
-  const { data: updateData, mutate } = useUpdateGreeting({
-    onSuccess: () => form.resetFields(),
-  });
 
   const { data } = useGetGreeting();
 
+  const { mutate } = useUpdateGreeting({
+    onSuccess: (data) => {
+      form.setFieldsValue({
+        ...data,
+        exposureDuration: data.exposureDuration.map((d) => convertTimezone(d)),
+      });
+    },
+  });
+
   const convertTimezone = (date: string) => {
-    const converted = dayjs.utc(date);
-    converted.tz('Asia/Seoul');
-    return converted;
+    return dayjs.utc(date).tz('Asia/Seoul');
   };
 
   const handleFinish = async (formValue: GreetingMessageFormValue) => {
@@ -50,24 +54,16 @@ export default function GreetingMessageForm() {
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      id: data?.data.id,
-      exposureDuration: data?.data.exposureDuration.map((d) => {
-        return convertTimezone(d);
-      }),
-      message: data?.data.message,
-    });
-  }, [data]);
-
-  useEffect(() => {
-    form.setFieldsValue({
-      id: updateData?.id,
-      exposureDuration: updateData?.exposureDuration.map((d) => {
-        return convertTimezone(d);
-      }),
-      message: updateData?.message,
-    });
-  }, [updateData]);
+    if (data) {
+      form.setFieldsValue({
+        id: data?.data.id,
+        exposureDuration: data?.data.exposureDuration.map((d) =>
+          convertTimezone(d),
+        ),
+        message: data?.data.message,
+      });
+    }
+  }, [data, form]);
 
   return (
     <ContentBox className={'flex h-full items-start'}>

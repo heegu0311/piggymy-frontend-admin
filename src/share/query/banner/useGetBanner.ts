@@ -23,6 +23,7 @@ export function useGetBanner(request: Request<null, GetBannerId>) {
   return useQuery({
     queryKey: ['banners', request.id?.bannerId],
     queryFn: () => getBanner(request),
+    enabled: !!request.id?.bannerId,
   });
 }
 

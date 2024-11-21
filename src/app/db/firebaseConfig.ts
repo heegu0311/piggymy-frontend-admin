@@ -1,6 +1,7 @@
 // firebaseConfig.ts
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,4 +20,6 @@ if (!app) {
   db = getFirestore(app);
 }
 
-export { db };
+const storage = getStorage(app);
+
+export { db, storage };

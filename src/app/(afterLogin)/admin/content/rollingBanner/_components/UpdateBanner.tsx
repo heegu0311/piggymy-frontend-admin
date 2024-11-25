@@ -11,56 +11,46 @@ import { BannerFormValue } from '@/type/bannerType';
 import RollingBannerForm from './BannerForm';
 
 interface UpdateBannerProps {
-  currentBannerId: number;
+  bannerId: number;
 }
 
-export default function UpdateBanner({ currentBannerId }: UpdateBannerProps) {
+export default function UpdateBanner({ bannerId }: UpdateBannerProps) {
   const [form] = useForm();
+
+  const { data, isSuccess } = useGetBanner({
+    id: { bannerId },
+    data: null,
+  });
   const { mutate: updateBanner } = useUpdateBanner();
   const { mutate: deleteBanner } = useDeleteBanner();
 
-  const { data, isSuccess } = useGetBanner({
-    id: { bannerId: currentBannerId },
-    data: null,
-  });
-
   const handleSubmit = (formValue: BannerFormValue) => {
     const { exposureDuration, image } = formValue;
+    console.log({
+      ...formValue,
+      exposureEndDate: exposureDuration[1],
+      exposureStartDate: exposureDuration[0],
+      image,
+      imageName: data?.data.imageName || '',
+      imagePath: data?.data.imagePath || '',
+    });
 
-    if (
-      image &&
-      image.length > 0 &&
-      image[0].url ===
-        String(data?.data.imagePath) + String(data?.data.imageName)
-    ) {
-      updateBanner({
-        id: { bannerId: currentBannerId },
-        data: {
-          ...formValue,
-          exposureEndDate: exposureDuration[1],
-          exposureStartDate: exposureDuration[0],
-          image: [],
-          imageName: String(data?.data.imageName),
-          imagePath: String(data?.data.imagePath),
-        },
-      });
-    } else {
-      updateBanner({
-        id: { bannerId: currentBannerId },
-        data: {
-          ...formValue,
-          exposureEndDate: exposureDuration[1],
-          exposureStartDate: exposureDuration[0],
-          imageName: '',
-          imagePath: '',
-        },
-      });
-    }
+    updateBanner({
+      id: { bannerId },
+      data: {
+        ...formValue,
+        exposureEndDate: exposureDuration[1],
+        exposureStartDate: exposureDuration[0],
+        image,
+        imageName: data?.data.imageName || '',
+        imagePath: data?.data.imagePath || '',
+      },
+    });
   };
 
   const handleCancel = () => {
     deleteBanner({
-      id: { bannerId: currentBannerId },
+      id: { bannerId },
       data: null,
     });
   };

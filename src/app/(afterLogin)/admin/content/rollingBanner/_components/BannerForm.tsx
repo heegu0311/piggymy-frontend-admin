@@ -18,7 +18,7 @@ import { BannerFormValue } from '@/type/bannerType';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-interface RollingBannerFormProps {
+interface BannerFormProps {
   onSubmit: (data: BannerFormValue) => void;
   onDelete: () => void;
   form: FormInstance;
@@ -38,13 +38,13 @@ interface RollingBannerFormProps {
   };
 }
 
-export default function RollingBannerForm({
+export default function BannerForm({
   initialValue,
   onSubmit,
   onDelete,
   form,
   mode,
-}: RollingBannerFormProps) {
+}: BannerFormProps) {
   const [type, setType] = useState<'VOCA' | 'QUIZ'>(
     initialValue ? initialValue.type : 'VOCA',
   );
@@ -123,7 +123,7 @@ export default function RollingBannerForm({
         >
           <TextArea rows={4} />
         </Form.Item>
-        <ImageUpload initialImage={initialValue?.image} />
+        <ImageUpload initialImage={initialValue?.image} maxCount={1} />
         <Form.Item
           label={<Label>버튼명</Label>}
           name="buttonName"
@@ -139,13 +139,11 @@ export default function RollingBannerForm({
         </Form.Item>
         {type === 'VOCA' ? (
           <VocaChoice
-            label="용어 카드 선택"
             name="moveVocaId"
             initialValue={initialValue?.moveVocaId}
           />
         ) : (
           <QuizChoice
-            label="퀴즈 카드 선택"
             name="moveQuizId"
             initialValue={initialValue?.moveQuizId}
           />

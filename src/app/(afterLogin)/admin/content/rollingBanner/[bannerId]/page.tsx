@@ -7,7 +7,7 @@ import UpdateBanner from '../_components/UpdateBanner';
 export default async function Banner({
   params,
 }: {
-  params: { bannerId: string };
+  params: { bannerId: number };
 }) {
   return (
     <>
@@ -15,10 +15,10 @@ export default async function Banner({
         <PageInfo title="롤링 배너 관리" path={['콘텐츠', '롤링 배너 관리']} />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <BannerList currentBannerId={Number(params.bannerId)} />
+        <BannerList />
       </Layout.Content.Full>
       <Layout.Content.Full>
-        <UpdateBanner currentBannerId={Number(params.bannerId)} />
+        <UpdateBanner bannerId={params.bannerId} />
       </Layout.Content.Full>
     </>
   );

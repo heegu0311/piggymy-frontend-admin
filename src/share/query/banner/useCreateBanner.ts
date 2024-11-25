@@ -54,7 +54,7 @@ export const createBanner = async (
 
   formData.append('banner', bannerBlob);
 
-  const response = await axiosInstance.post<Response<number>>(
+  const response = await axiosInstance.post<Response<{ id: number }>>(
     `/api/banners`,
     formData,
     {
@@ -78,7 +78,8 @@ export function useCreateBanner() {
       notification.success({
         message: '배너 생성 성공',
       });
-      router.push(`/admin/content/rollingBanner/${response.data}`);
+
+      router.push(`/admin/content/rollingBanner/${response.data.id}`);
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
       if (axios.isAxiosError(error)) {

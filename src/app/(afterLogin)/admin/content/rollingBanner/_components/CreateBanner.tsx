@@ -5,7 +5,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useCreateBanner } from '@/share/query/banner/useCreateBanner';
 import { BannerFormValue } from '@/type/bannerType';
 
-import RollingBannerForm from './BannerForm';
+import BannerForm from './BannerForm';
 
 export default function CreateBanner() {
   const [form] = useForm();
@@ -26,7 +26,7 @@ export default function CreateBanner() {
   };
 
   return (
-    <RollingBannerForm
+    <BannerForm
       form={form}
       mode="create"
       onDelete={handleCancel}

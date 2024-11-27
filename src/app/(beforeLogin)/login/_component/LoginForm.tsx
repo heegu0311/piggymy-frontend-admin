@@ -33,7 +33,7 @@ export default function LoginForm() {
     <div className="flex h-full items-center justify-center bg-white  pl-20 pr-20">
       <div className="w-full">
         <p className="text-2xl font-bold">관리자 로그인</p>
-        <form className="mt-5" onSubmit={handleSubmit}>
+        <form className="mt-5" onSubmit={handleSubmit} method={'POST'}>
           <div className="flex w-full flex-row">
             <input
               type="text"

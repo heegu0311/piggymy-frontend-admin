@@ -11,8 +11,8 @@ import { Request, Response } from '@/type/apiType';
 import axiosInstance from '../axios';
 
 export interface LoginRequestJson {
-  memberId: string;
-  password: string;
+  id: string;
+  pw: string;
 }
 
 export interface LoginResponse {
@@ -53,10 +53,11 @@ export function useLogin() {
       router.push('/admin');
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
+      console.log(error);
       if (axios.isAxiosError(error)) {
         notification.error({
           message: '로그인 실패',
-          description: `${error.response?.data.code}: ${error.response?.data.message}`,
+          description: `로그인이 실패했습니다!`,
         });
       }
     },

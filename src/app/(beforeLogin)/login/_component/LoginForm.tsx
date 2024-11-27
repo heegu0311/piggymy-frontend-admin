@@ -12,20 +12,20 @@ export default function LoginForm() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const id = formData.get('id')?.toString();
-    const password = formData.get('password')?.toString();
+    const pw = formData.get('pw')?.toString();
 
     if (!id) {
       notification.error({
         message: 'ID를 입력해 주십시오',
       });
-    } else if (!password) {
+    } else if (!pw) {
       notification.error({
         message: '비밀번호를 입력해 주십시오',
       });
     }
 
-    if (id && password) {
-      mutate({ data: { memberId: id, password: password } });
+    if (id && pw) {
+      mutate({ data: { id, pw } });
     }
   };
 
@@ -47,7 +47,7 @@ export default function LoginForm() {
               type="text"
               className="mb-3 w-full rounded-3xl border-2 border-gray-5 p-2 pl-4"
               placeholder="PW"
-              name="password"
+              name="pw"
             />
           </div>
           <div className="h-8 w-full border-b-[1px] border-gray-5 p-2 pt-0">

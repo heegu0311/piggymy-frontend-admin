@@ -1,7 +1,8 @@
-// firebaseConfig.ts
-import { FirebaseApp, initializeApp } from 'firebase/app';
-import { Firestore, getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import firebase from 'firebase/compat/app';
+import initializeApp = firebase.initializeApp;
+import { FirebaseApp } from '@firebase/app-types';
+import { Firestore, getFirestore } from '@firebase/firestore';
+import { getStorage } from '@firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

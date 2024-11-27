@@ -53,7 +53,6 @@ export function useLogin() {
       router.push('/admin');
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
-      console.log(error);
       if (axios.isAxiosError(error)) {
         notification.error({
           message: '로그인 실패',

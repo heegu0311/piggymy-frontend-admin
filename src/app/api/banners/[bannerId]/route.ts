@@ -44,9 +44,7 @@ export async function PUT(
 
     const bannersRef = doc(db, 'banners', bannerId);
 
-    console.log(thumbnail);
     if (thumbnail) {
-      console.log('unage;', bannerObject.imagePath, bannerObject.imageName);
       if (bannerObject.imagePath && bannerObject.imageName) {
         // Delete the file
         const storageRef = ref(storage, `/banners/${bannerObject.imageName}`);
@@ -69,9 +67,20 @@ export async function PUT(
 
       return NextResponse.json({ data: null }, { status: 200 });
     } else {
-      await updateDoc(bannersRef, {
-        ...bannerObject,
-      });
+      if (!bannerObject.imagePath && !!bannerObject.imageName) {
+        const storageRef = ref(storage, `/banners/${bannerObject.imageName}`);
+        await deleteObject(storageRef);
+
+        await updateDoc(bannersRef, {
+          ...bannerObject,
+          imagePath: '',
+          imageName: '',
+        });
+      } else {
+        await updateDoc(bannersRef, {
+          ...bannerObject,
+        });
+      }
 
       return NextResponse.json({ data: null }, { status: 200 });
     }

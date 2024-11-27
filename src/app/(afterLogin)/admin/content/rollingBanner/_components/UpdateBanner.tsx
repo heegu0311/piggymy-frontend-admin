@@ -23,7 +23,7 @@ export default function UpdateBanner({ bannerId }: UpdateBannerProps) {
     id: { bannerId },
     data: null,
   });
-  const { mutate: updateBanner } = useUpdateBanner();
+  const { mutate: updateBanner } = useUpdateBanner(bannerId);
   const { mutate: deleteBanner } = useDeleteBanner();
 
   const handleSubmit = (formValue: BannerFormValue) => {
@@ -36,8 +36,8 @@ export default function UpdateBanner({ bannerId }: UpdateBannerProps) {
         exposureEndDate: exposureDuration[1],
         exposureStartDate: exposureDuration[0],
         image,
-        imageName: data?.data.imageName || '',
-        imagePath: data?.data.imagePath || '',
+        imageName: data?.data.imageName,
+        imagePath: !!image && image.length > 0 ? data?.data.imagePath : '',
       },
     });
   };

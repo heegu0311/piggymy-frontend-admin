@@ -12,8 +12,8 @@ interface UpdateBannerId {
 }
 
 interface UpdateBannerRequestJson extends BannerRequestJson {
-  imagePath: string;
-  imageName: string;
+  imagePath?: string;
+  imageName?: string;
 }
 
 export const updateBanner = async (
@@ -77,13 +77,14 @@ export const updateBanner = async (
   return response.data;
 };
 
-export function useUpdateBanner() {
+export function useUpdateBanner(bannerId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: updateBanner,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['banners'] });
+      await queryClient.invalidateQueries({ queryKey: [bannerId] });
       notification.success({
         message: '배너 수정 성공',
       });

@@ -81,6 +81,13 @@ export default function RollingBannerList({
                 exposureEndDate,
                 isUse,
               } = banner;
+              const today = dayjs().format('YYYY-MM-DD');
+              const isActive = dayjs(today).isBetween(
+                exposureStartDate,
+                exposureEndDate,
+                'day',
+                '()',
+              );
 
               return (
                 <SwiperSlide key={id} className="">
@@ -89,14 +96,7 @@ export default function RollingBannerList({
                     category={type}
                     buttonTitle={buttonName}
                     image={imagePath + imageName}
-                    isActive={
-                      dayjs().isBetween(
-                        exposureStartDate,
-                        exposureEndDate,
-                        null,
-                        '[]',
-                      ) && isUse
-                    }
+                    isActive={isActive && isUse}
                     isSelected={currentBannerId === id}
                     createdDate={dayjs(createdDate)}
                     route={`/admin/content/rollingBanner/${id}`}

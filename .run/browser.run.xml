@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="browser" type="JavascriptDebugType" uri="http://localhost:3000" useFirstLineBreakpoints="true">
+    <mapping url="http://localhost:3000" local-file="/Applications/Arc.app" />
+    <method v="2" />
+  </configuration>
+</component>

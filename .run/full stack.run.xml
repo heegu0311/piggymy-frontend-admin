@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="full stack" type="CompoundRunConfigurationType">
+    <toRun name="browser" type="JavascriptDebugType" />
+    <toRun name="server" type="NodeJSConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

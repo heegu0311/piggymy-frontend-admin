@@ -1,5 +1,7 @@
 'use client';
 
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 
@@ -81,5 +83,9 @@ export default function UpdateBadge({ currentBadgeId }: UpdateBadgeProps) {
     );
   }
 
-  return <>로딩</>;
+  return (
+    <div className={'flex min-h-16 w-full items-center justify-center'}>
+      <Spin indicator={<LoadingOutlined spin />} size="large" />
+    </div>
+  );
 }

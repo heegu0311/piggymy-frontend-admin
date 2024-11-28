@@ -151,7 +151,7 @@ function MemberSearchList() {
                   <Card
                     id={member.id.toString()}
                     koreanTitle={member.name}
-                    createdDate={dayjs(member.createdDate)}
+                    createdDate={dayjs(member.createdDate).format('YYYY-MM-DD')}
                     isActive={true}
                     isChecked={selectMemberList
                       .map((member) => member.id)

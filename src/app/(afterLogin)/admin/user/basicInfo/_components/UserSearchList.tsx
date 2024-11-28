@@ -149,7 +149,7 @@ function UserSearchList() {
                   <Card
                     id={user.id.toString()}
                     koreanTitle={user.nickname}
-                    createdDate={dayjs(user.createdDate)}
+                    createdDate={dayjs(user.createdDate).format('YYYY-MM-DD')}
                     isActive={!user.delYn}
                     isChecked={selectUserList
                       .map((user) => user.id)

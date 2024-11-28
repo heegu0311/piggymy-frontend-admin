@@ -217,7 +217,7 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
                   <Card
                     id={quiz.id.toString()}
                     koreanTitle={quiz.title}
-                    createdDate={dayjs(quiz.createdDate)}
+                    createdDate={dayjs(quiz.createdDate).format('YYYY-MM-DD')}
                     isActive={quiz.isUse}
                     isChecked={selectQuizIds.includes(quiz.id)}
                     route={`/admin/quiz/quizManagement/${quiz.id}`}

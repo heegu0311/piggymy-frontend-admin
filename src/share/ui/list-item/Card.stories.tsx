@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 
 import Card from './Card';
@@ -17,7 +16,7 @@ function StoryCardList() {
     {
       id: string;
       title: string;
-      createdDate: Dayjs;
+      createdDate: string;
       isActive: boolean;
       isSelected: boolean;
       route: string;
@@ -28,7 +27,7 @@ function StoryCardList() {
       title: '피치마켓 (peach market)',
       id: '1',
       isChecked: false,
-      createdDate: dayjs('2023-11-01'),
+      createdDate: '2023-11-01',
       isActive: true,
       isSelected: true,
       route: '/asd',
@@ -37,7 +36,7 @@ function StoryCardList() {
       title: '관치금융',
       id: '2',
       isChecked: false,
-      createdDate: dayjs('2023-11-01'),
+      createdDate: '2023-11-01',
       isActive: false,
       isSelected: false,
       route: '/asd',
@@ -81,7 +80,7 @@ export const SelectedCard: Story = {
   args: {
     koreanTitle: '피치마켓 (peach market)',
     id: '1',
-    createdDate: dayjs('2023-11-01'),
+    createdDate: '2023-11-01',
     isActive: true,
     isSelected: true,
     route: '/asd',
@@ -92,7 +91,7 @@ export const UnselectedCard: Story = {
   args: {
     koreanTitle: '관치금융',
     id: '2',
-    createdDate: dayjs('2023-11-01'),
+    createdDate: '2023-11-01',
     isActive: false,
     isSelected: false,
     route: '/asd',

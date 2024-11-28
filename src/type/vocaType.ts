@@ -3,6 +3,7 @@ import { UploadFile } from 'antd/es/upload/interface';
 export interface VocaListResponseJson {
   totalCount: number;
   list: VocaModel[];
+  lastVisible: any;
 }
 
 export interface VocaResponseJson {

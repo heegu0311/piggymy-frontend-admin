@@ -1,6 +1,5 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { Form, Pagination } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, usePathname, useRouter } from 'next/navigation';
@@ -15,10 +14,7 @@ import Text from '@/share/form/item/Text';
 import NoticeModal from '@/share/modal/NoticeModal';
 import { useModal } from '@/share/modal/useModal';
 import { useDeleteVocas } from '@/share/query/voca/useDeleteVocas';
-import {
-  prefetchVocaList,
-  useGetVocaList,
-} from '@/share/query/voca/useGetVocaList';
+import { useGetVocaList } from '@/share/query/voca/useGetVocaList';
 import { usePatchVocasIsUse } from '@/share/query/voca/useUpdateVoca';
 import Button from '@/share/ui/button/Button';
 import IconButton from '@/share/ui/button/IconButton';
@@ -51,7 +47,6 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
   const router = useRouter();
   const path = usePathname();
   const { openModal, closeModal } = useModal();
-  const queryClient = useQueryClient();
 
   const [selectVocaList, setSelectVocaList] = useState<VocaModel[]>([]);
   const [page, setPage] = useState(1);
@@ -60,7 +55,7 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
   const selectVocaIds = selectVocaList.map((voca) => voca.id);
   const selectVocaIsUseValues = selectVocaList.map((voca) => voca.isUse);
 
-  const { data } = useGetVocaList({
+  const { data, refetch } = useGetVocaList({
     data: {
       page,
       page_size: 10,
@@ -75,15 +70,8 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
   const vocaList = data?.data.list ?? [];
 
   useEffect(() => {
-    prefetchVocaList(queryClient, {
-      data: {
-        page: page + 1,
-        page_size: 10,
-        sort_type: sortType,
-        ...searchParams,
-      },
-    }).then();
-  }, [page, sortType, queryClient, searchParams]);
+    refetch().then();
+  }, [page, refetch]);
 
   const handleFinish = (formValue: FormExampleValue) => {
     const params = {

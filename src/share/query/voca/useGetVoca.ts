@@ -5,7 +5,7 @@ import { VocaResponseJson } from '@/type/vocaType';
 
 import axiosInstance from '../axios';
 
-export const getVocaDetail = async (request: Request<number>) => {
+export const getVocaDetail = async (request: Request<string>) => {
   try {
     const {
       data: { data },
@@ -18,7 +18,7 @@ export const getVocaDetail = async (request: Request<number>) => {
   }
 };
 
-export function useGetVoca(vocaId: number) {
+export function useGetVoca(vocaId: string) {
   return useQuery({
     queryKey: ['voca', vocaId],
     queryFn: () => getVocaDetail({ data: vocaId }),

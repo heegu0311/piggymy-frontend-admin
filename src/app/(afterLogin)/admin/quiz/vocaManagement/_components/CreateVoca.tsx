@@ -1,18 +1,28 @@
 'use client';
 
 import { useForm } from 'antd/es/form/Form';
-import { useParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import dayjs from 'dayjs';
+import React, { useEffect, useMemo } from 'react';
 
 import VocaForm from '@/app/(afterLogin)/admin/quiz/vocaManagement/_components/VocaForm';
 import { useCreateVoca } from '@/share/query/voca/useCreateVoca';
 import { CreateVocaRequestJson, UpdateVocaRequestJson } from '@/type/vocaType';
 
 export default function CreateVoca() {
-  const params = useParams();
   const [form] = useForm();
 
   const { mutate: create } = useCreateVoca();
+
+  const initialValues = useMemo(
+    () => ({
+      createdDate: dayjs().format('YYYY-MM-DD'),
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [form, initialValues]);
 
   const handleCancel = () => {
     form.resetFields();
@@ -24,12 +34,6 @@ export default function CreateVoca() {
     create({ data: formValue as CreateVocaRequestJson });
     form.resetFields();
   };
-
-  useEffect(() => {
-    if (!params.vocaId) {
-      form.resetFields();
-    }
-  }, [form, params.vocaId]);
 
   return (
     <VocaForm form={form} onCancel={handleCancel} onFinish={handleFinish} />

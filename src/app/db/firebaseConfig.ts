@@ -13,13 +13,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let app: FirebaseApp | null = null;
-let db: Firestore;
-
-if (!app) {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-}
+const app: FirebaseApp = initializeApp(firebaseConfig);
+const db: Firestore = getFirestore(app);
 
 const storage = getStorage(app);
 

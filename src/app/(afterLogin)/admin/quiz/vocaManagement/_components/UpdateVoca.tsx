@@ -15,7 +15,7 @@ export default function UpdateVoca() {
   const router = useRouter();
   const [form] = useForm();
 
-  const { data, isError } = useGetVoca(+params.vocaId);
+  const { data, isError } = useGetVoca(params.vocaId as string);
   const { mutate: update } = useUpdateVoca();
 
   const initialValues = useMemo(

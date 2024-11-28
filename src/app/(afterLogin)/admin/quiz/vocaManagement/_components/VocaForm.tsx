@@ -29,12 +29,12 @@ function VocaForm({ initialValues, form, onCancel, onFinish }: VocaFormProps) {
         className="h-full w-full overflow-y-auto"
         onFinish={onFinish}
       >
-        <Form.Item label={<Label>등록일</Label>}>
+        <Form.Item label={<Label>등록일</Label>} name={'createdDate'}>
           <div className={'flex w-full items-start justify-between'}>
             <i className={'flex h-8 items-center'}>
               {initialValues?.createdDate
                 ? dayjs(initialValues?.createdDate).format('YYYY-MM-DD')
-                : ''}
+                : dayjs().format('YYYY-MM-DD')}
             </i>
             <ActiveCheckbox />
           </div>

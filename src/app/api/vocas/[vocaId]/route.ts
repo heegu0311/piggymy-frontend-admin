@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import {
   deleteObject,
@@ -19,9 +20,13 @@ export async function GET(
     const vocaId = (await params).vocaId;
     const docRef = doc(db, 'vocas', vocaId);
     const docSnap = await getDoc(docRef);
+    const docData = docSnap.data() || {};
 
     return NextResponse.json({
-      data: docSnap.data(),
+      data: {
+        ...docData,
+        createdDate: dayjs(docData.createdDate.toDate()).utc().format(),
+      },
     });
   } catch (error) {
     return NextResponse.json({ error: 'An error occurred' }, { status: 500 });

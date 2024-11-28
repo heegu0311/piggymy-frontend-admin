@@ -1,4 +1,7 @@
-import { addDoc, collection } from 'firebase/firestore';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,6 +9,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '@/app/db/firebaseConfig';
 import { fetchPaginatedData } from '@/share/firebase/firebase';
 import { formDataToObject } from '@/share/utils/converter';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function POST(request: Request) {
   try {
@@ -16,6 +22,7 @@ export async function POST(request: Request) {
     const { voca } = formDataToObject(formData);
     const vocaText = await voca.text();
     const vocaObject = JSON.parse(vocaText);
+    const timestamp = Timestamp.fromDate(new Date());
 
     if (thumbnail) {
       // 고유한 파일명을 생성
@@ -29,6 +36,7 @@ export async function POST(request: Request) {
 
       const res = await addDoc(collection(db, 'vocas'), {
         ...vocaObject,
+        createdDate: timestamp,
         imagePath,
         imageName,
       });
@@ -37,6 +45,7 @@ export async function POST(request: Request) {
     } else {
       const res = await addDoc(collection(db, 'vocas'), {
         ...vocaObject,
+        createdDate: timestamp,
       });
 
       return NextResponse.json({ data: { id: res.id } }, { status: 201 });

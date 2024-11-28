@@ -205,7 +205,7 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
                   <Card
                     id={voca.id.toString()}
                     koreanTitle={voca.koreanTitle}
-                    createdDate={dayjs(voca.createdDate)}
+                    createdDate={dayjs(voca.createdDate).format('YYYY-MM-DD')}
                     isActive={voca.isUse}
                     isChecked={selectVocaList
                       .map((voca) => voca.id)

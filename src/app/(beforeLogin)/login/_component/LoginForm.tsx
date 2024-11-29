@@ -1,12 +1,16 @@
 'use client';
 
 import { notification } from 'antd';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 
+import { useModal } from '@/share/modal/useModal';
 import { useLogin } from '@/share/query/auth/useLogin';
+import Button from '@/share/ui/button/Button';
 
 export default function LoginForm() {
   const { mutate } = useLogin();
+
+  const { openModal, closeModal } = useModal();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +32,17 @@ export default function LoginForm() {
       mutate({ data: { id, pw } });
     }
   };
+
+  useEffect(() => {
+    openModal(
+      'loginGuide',
+      <div className={'flex flex-col items-center justify-center gap-2'}>
+        <p>로그인을 위해 아이디 test, 비밀번호 1234를 입력하세요</p>
+        <p>현재 API 개발중인 상태입니다!</p>
+        <Button onClick={() => closeModal('loginGuide')}>닫기</Button>
+      </div>,
+    );
+  }, []);
 
   return (
     <div className="flex h-full items-center justify-center bg-white  pl-20 pr-20">

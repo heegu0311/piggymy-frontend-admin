@@ -19,7 +19,7 @@ export default function Sidebar({ sidebarList, title }: SidebarProps) {
         <li className="pb-2 pl-4 text-lg font-bold text-gray-4">{title}</li>
         {sidebarList
           ? sidebarList.map((item: HeaderType) => {
-              const isActive = routes.includes(item.route);
+              const isActive = routes ? routes.includes(item.route) : false;
               return (
                 <li
                   key={item.route}

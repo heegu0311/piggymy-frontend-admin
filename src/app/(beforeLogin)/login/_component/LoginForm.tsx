@@ -38,6 +38,7 @@ export default function LoginForm() {
       'loginGuide',
       <div className={'flex flex-col items-center justify-center gap-2'}>
         <p>로그인을 위해 아이디 test, 비밀번호 1234를 입력하세요</p>
+        <p>⚒️표시된 메뉴는 API 개발 진행중입니다.</p>
         <p>현재 API 개발중인 상태입니다!</p>
         <Button onClick={() => closeModal('loginGuide')}>닫기</Button>
       </div>,

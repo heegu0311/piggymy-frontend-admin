@@ -1,7 +1,13 @@
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Timestamp,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -71,5 +77,32 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       data: { error: 'Failed to fetch paginated data' },
     });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll('id');
+
+    if (ids.length === 0) {
+      return NextResponse.json({ error: 'No IDs provided' }, { status: 400 });
+    }
+
+    await Promise.all(
+      ids.map(async (id) => {
+        await deleteDoc(doc(db, 'vocas', id));
+      }),
+    );
+
+    return NextResponse.json(
+      { message: 'Resources deleted successfully', ids },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to delete resources' },
+      { status: 500 },
+    );
   }
 }

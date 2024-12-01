@@ -11,3 +11,7 @@ export function buildQueryString(params: {
     )
     .join('&');
 }
+
+export function buildQueryStringForIds(ids: number[]) {
+  return ids.map((id) => `id=${id}`).join('&');
+}

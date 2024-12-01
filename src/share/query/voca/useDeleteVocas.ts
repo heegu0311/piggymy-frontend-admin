@@ -2,16 +2,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
 
+import { buildQueryStringForIds } from '@/share/utils/query';
 import { Request, Response } from '@/type/apiType';
 
 import axiosInstance from '../axios';
 
 export const deleteVocaList = async (
-  deleteData: Request<{ vocaIds: number[] }>,
+  deleteData: Request<{
+    vocaIds: number[];
+  }>,
 ) => {
-  const response = await axiosInstance.post<Response<number>>(
-    `/api/vocas/delete`,
-    deleteData.data,
+  const response = await axiosInstance.delete<Response<number>>(
+    `/api/vocas?${buildQueryStringForIds(deleteData.data.vocaIds)}`,
   );
 
   return response.data;

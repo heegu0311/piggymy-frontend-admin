@@ -47,7 +47,7 @@ export async function PUT(
     const vocaText = await voca.text();
     const vocaObject = JSON.parse(vocaText);
 
-    const vocasRef = doc(db, 'vocas', vocaId);
+    const vocaRef = doc(db, 'vocas', vocaId);
 
     if (thumbnail) {
       if (vocaObject.imagePath && vocaObject.imageName) {
@@ -64,7 +64,7 @@ export async function PUT(
       await uploadBytes(storageRef, thumbnail as Blob);
       const imagePath = await getDownloadURL(storageRef);
 
-      await updateDoc(vocasRef, {
+      await updateDoc(vocaRef, {
         ...vocaObject,
         imagePath,
         imageName: fileName,
@@ -76,13 +76,13 @@ export async function PUT(
         const storageRef = ref(storage, `/vocas/${vocaObject.imageName}`);
         await deleteObject(storageRef);
 
-        await updateDoc(vocasRef, {
+        await updateDoc(vocaRef, {
           ...vocaObject,
           imagePath: '',
           imageName: '',
         });
       } else {
-        await updateDoc(vocasRef, {
+        await updateDoc(vocaRef, {
           ...vocaObject,
         });
       }

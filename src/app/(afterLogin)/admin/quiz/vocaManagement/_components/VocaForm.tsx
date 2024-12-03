@@ -10,12 +10,12 @@ import Label from '@/share/form/item/Label';
 import QuizSelect from '@/share/form/item/QuizSelect';
 import Button from '@/share/ui/button/Button';
 import ContentBox from '@/share/ui/content-box/ContentBox';
-import { CreateVocaRequestJson, UpdateVocaRequestJson } from '@/type/vocaType';
+import { UpdateVocaRequestJson, VocaFormValue } from '@/type/vocaType';
 
 interface VocaFormProps {
-  initialValues?: UpdateVocaRequestJson;
+  initialValues: UpdateVocaRequestJson;
   form: FormInstance;
-  onFinish: (formValue: CreateVocaRequestJson | UpdateVocaRequestJson) => void;
+  onFinish: (formValue: VocaFormValue) => void;
   onCancel: () => void;
 }
 
@@ -52,10 +52,10 @@ function VocaForm({ initialValues, form, onCancel, onFinish }: VocaFormProps) {
         >
           <Input placeholder="내용을 입력해주세요." />
         </Form.Item>
-        <ImageUpload label={'대표이미지'} maxCount={1} />
+        <ImageUpload initialImage={initialValues?.image} maxCount={1} />
         <Form.Item
           label={<Label>대표이미지 출처</Label>}
-          name="thumbnailSourceName"
+          name="imageName"
           className={'w-full'}
         >
           <Input placeholder="내용을 입력해주세요." />

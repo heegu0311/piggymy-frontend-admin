@@ -6,9 +6,15 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   Timestamp,
 } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,7 +44,7 @@ export async function POST(request: Request) {
       // 'file' comes from the Blob or File API
       await uploadBytes(storageRef, thumbnail as Blob);
       const imagePath = await getDownloadURL(storageRef);
-      const imageName = await getDownloadURL(storageRef);
+      const imageName = fileName;
 
       const res = await addDoc(collection(db, 'vocas'), {
         ...vocaObject,
@@ -91,6 +97,16 @@ export async function DELETE(request: NextRequest) {
 
     await Promise.all(
       ids.map(async (id) => {
+        const docRef = doc(db, 'vocas', id);
+        const docSnap = await getDoc(docRef);
+        const vocaObject = docSnap.data() || {};
+
+        if (vocaObject.imagePath && vocaObject.imageName) {
+          // Delete the file
+          const storageRef = ref(storage, `/vocas/${vocaObject.imageName}`);
+          await deleteObject(storageRef);
+        }
+
         await deleteDoc(doc(db, 'vocas', id));
       }),
     );

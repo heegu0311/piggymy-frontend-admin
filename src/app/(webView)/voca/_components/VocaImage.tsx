@@ -11,10 +11,10 @@ export default function VocaImage() {
   const { data } = useGetVoca(Number(params.vocaId));
   return (
     <>
-      {data?.thumbnailName && data.thumbnailPath ? (
+      {data?.imageName && data.imagePath ? (
         <section>
           <Image
-            src={data.thumbnailPath + data.thumbnailName}
+            src={data.imagePath + data.imageName}
             alt="img"
             width={768}
             className="min-h-[184px] bg-gray-6"

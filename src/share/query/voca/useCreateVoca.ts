@@ -18,8 +18,8 @@ export const createVoca = async (vocaData: Request<CreateVocaRequestJson>) => {
     createdDate,
     sourceName,
     sourceLink,
-    thumbnailSourceName,
-    thumbnailSourceLink,
+    imageName,
+    imagePath,
     isUse,
     image,
   } = vocaData.data;
@@ -39,15 +39,15 @@ export const createVoca = async (vocaData: Request<CreateVocaRequestJson>) => {
     [
       JSON.stringify({
         koreanTitle: koreanTitle || '가나다',
-        englishTitle: englishTitle || 'abc',
-        koreanCategory: koreanCategory || 'r',
+        englishTitle: englishTitle || '',
+        koreanCategory: koreanCategory || 'ㄱ',
         englishCategory: englishCategory || 'a',
         content: content || '',
         createdDate: createdDate || '',
-        sourceName: sourceName || 'abc',
+        sourceName: sourceName || '',
         sourceLink: sourceLink || '',
-        thumbnailSourceName: thumbnailSourceName || 'abc',
-        thumbnailSourceLink: thumbnailSourceLink || 'abc',
+        imageName: imageName || '',
+        imagePath: imagePath || '',
         isUse: isUse,
       }),
     ],
@@ -56,7 +56,7 @@ export const createVoca = async (vocaData: Request<CreateVocaRequestJson>) => {
 
   formData.append('voca', vocaBlob);
 
-  const response = await axiosInstance.post<Response<number>>(
+  const response = await axiosInstance.post<Response<{ id: number }>>(
     `/api/vocas`,
     formData,
     {
@@ -80,7 +80,7 @@ export function useCreateVoca() {
       notification.success({
         message: '용어 생성 성공',
       });
-      router.push(`/admin/quiz/vocaManagement/${data.data}`);
+      router.push(`/admin/quiz/vocaManagement/${data.data.id}`);
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
       if (axios.isAxiosError(error)) {

@@ -1,9 +1,23 @@
 import { UploadFile } from 'antd/es/upload/interface';
+import { Dayjs } from 'dayjs';
 
 export interface VocaListResponseJson {
   totalCount: number;
   list: VocaModel[];
   lastVisible: any;
+}
+
+export interface VocaRequestJson {
+  koreanTitle: string;
+  englishTitle: string;
+  koreanCategory: string;
+  englishCategory: string;
+  content: string;
+  image: UploadFile[];
+  sourceName: string;
+  sourceLink: string;
+  isUse: false;
+  quizId: string | null;
 }
 
 export interface VocaResponseJson {
@@ -13,19 +27,29 @@ export interface VocaResponseJson {
   koreanCategory: string;
   englishCategory: string;
   content: string;
-  thumbnailPath: string;
-  thumbnailName: string;
+  imagePath: string;
+  imageName: string;
   sourceName: string;
   sourceLink: string;
-  thumbnailSourceName: string;
-  thumbnailSourceLink: string;
-  helpful: number;
   isUse: false;
-  bookmarkCount: number;
   createdDate: string;
-  modifiedDate: string;
-  quizId: number | string | null;
-  quizTitle: number | string | null;
+  quizId: string | null;
+}
+
+export interface VocaResponseJson {
+  id: number;
+  koreanTitle: string;
+  englishTitle: string;
+  koreanCategory: string;
+  englishCategory: string;
+  content: string;
+  imagePath: string;
+  imageName: string;
+  sourceName: string;
+  sourceLink: string;
+  isUse: false;
+  createdDate: string;
+  quizId: string | null;
 }
 
 export interface VocaModel extends VocaResponseJson {}
@@ -39,14 +63,12 @@ export interface CreateVocaRequestJson {
   content: string;
   sourceName: string;
   sourceLink: string;
-  thumbnailPath: string;
-  thumbnailName: string;
-  thumbnailSourceName: string;
-  thumbnailSourceLink: string;
+  imagePath: string;
+  imageName: string;
   isUse: false;
   image: UploadFile[];
   createdDate: string;
-  quizId: number | string;
+  quizId: string | null;
 }
 
 export interface UpdateVocaRequestJson {
@@ -58,12 +80,26 @@ export interface UpdateVocaRequestJson {
   content: string;
   sourceName: string;
   sourceLink: string;
-  thumbnailPath: string;
-  thumbnailName: string;
-  thumbnailSourceName: string;
-  thumbnailSourceLink: string;
+  imagePath: string;
+  imageName: string;
+  isUse: false;
+  image: string;
+  createdDate: Dayjs;
+  quizId: string | null;
+}
+
+export interface VocaFormValue {
+  vocaId?: number;
+  koreanTitle: string;
+  englishTitle: string;
+  koreanCategory: string;
+  englishCategory: string;
+  content: string;
+  sourceName: string;
+  sourceLink: string;
+  imagePath: string;
+  imageName: string;
   isUse: false;
   image: UploadFile[];
-  createdDate: string;
-  quizId?: number | string;
+  quizId: string | null;
 }

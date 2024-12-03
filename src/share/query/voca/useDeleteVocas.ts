@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
 import { buildQueryStringForIds } from '@/share/utils/query';
 import { Request, Response } from '@/type/apiType';
@@ -20,6 +21,7 @@ export const deleteVocaList = async (
 };
 
 export function useDeleteVocas() {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -29,6 +31,7 @@ export function useDeleteVocas() {
       notification.success({
         message: '용어 삭제 성공',
       });
+      router.push('/admin/quiz/vocaManagement');
     },
     onError: (error: AxiosError<Response<unknown>, unknown>) => {
       if (axios.isAxiosError(error)) {

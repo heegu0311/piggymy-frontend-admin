@@ -5,12 +5,14 @@ import { VocaResponseJson } from '@/type/vocaType';
 
 import axiosInstance from '../axios';
 
-export const getVocaDetail = async (request: Request<string>) => {
+interface GetVocaId {
+  vocaId: number;
+}
+
+export const getVoca = async (request: Request<null, GetVocaId>) => {
   try {
-    const {
-      data: { data },
-    } = await axiosInstance.get<Response<VocaResponseJson>>(
-      `/api/vocas/${request.data}`,
+    const { data } = await axiosInstance.get<Response<VocaResponseJson>>(
+      `/api/vocas/${request.id?.vocaId}`,
     );
     return data;
   } catch (error) {
@@ -18,10 +20,10 @@ export const getVocaDetail = async (request: Request<string>) => {
   }
 };
 
-export function useGetVoca(vocaId: string) {
+export function useGetVoca(request: Request<null, GetVocaId>) {
   return useQuery({
-    queryKey: ['voca', vocaId],
-    queryFn: () => getVocaDetail({ data: vocaId }),
+    queryKey: [request.id?.vocaId],
+    queryFn: () => getVoca(request),
     retryDelay: 300,
   });
 }

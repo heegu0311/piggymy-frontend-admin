@@ -3,12 +3,21 @@ import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
 
 import { Request, Response } from '@/type/apiType';
-import { UpdateVocaRequestJson } from '@/type/vocaType';
+import { VocaRequestJson } from '@/type/vocaType';
 
 import axiosInstance from '../axios';
 
+interface UpdateVocaId {
+  vocaId: string;
+}
+
+interface UpdateVocaRequestJson extends VocaRequestJson {
+  imagePath?: string;
+  imageName?: string;
+}
+
 export const updateVoca = async (
-  request: Request<UpdateVocaRequestJson, number>,
+  request: Request<UpdateVocaRequestJson, UpdateVocaId>,
 ) => {
   const {
     koreanTitle,
@@ -18,10 +27,8 @@ export const updateVoca = async (
     content,
     sourceName,
     sourceLink,
-    thumbnailPath,
-    thumbnailName,
-    thumbnailSourceName,
-    thumbnailSourceLink,
+    imagePath,
+    imageName,
     isUse,
     image,
   } = request.data;
@@ -40,17 +47,15 @@ export const updateVoca = async (
   const vocaBlob = new Blob(
     [
       JSON.stringify({
-        koreanTitle: koreanTitle || '가나다',
-        englishTitle: englishTitle || 'abc',
-        koreanCategory: koreanCategory || 'r',
+        koreanTitle: koreanTitle,
+        englishTitle: englishTitle,
+        koreanCategory: koreanCategory || 'ㄱ',
         englishCategory: englishCategory || 'a',
         content: content || '',
         sourceName: sourceName || 'abc',
         sourceLink: sourceLink || 'abc',
-        thumbnailPath,
-        thumbnailName,
-        thumbnailSourceName: thumbnailSourceName || 'abc',
-        thumbnailSourceLink: thumbnailSourceLink || 'abc',
+        imagePath,
+        imageName,
         isUse: isUse,
       }),
     ],
@@ -60,7 +65,7 @@ export const updateVoca = async (
   formData.append('voca', vocaBlob);
 
   const response = await axiosInstance.put<Response<number>>(
-    `/api/vocas/${request.id}`,
+    `/api/vocas/${request.id?.vocaId}`,
     formData,
     {
       headers: {

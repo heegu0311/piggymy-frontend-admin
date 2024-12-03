@@ -8,17 +8,12 @@ import Layout from '@/share/layout/Layout';
 import PageInfo from '../../../_components/PageInfo';
 
 export default async function VocaUpdate({
+  params,
   searchParams,
 }: {
+  params: { vocaId: number };
   searchParams: { [key: string]: string | undefined };
 }) {
-  const params = {
-    start_date: searchParams['start_date'],
-    end_date: searchParams['end_date'],
-    is_use: searchParams['is_use'],
-    search_keyword: searchParams['search_keyword'],
-  };
-
   return (
     <>
       <Layout.Content.Full>
@@ -33,10 +28,10 @@ export default async function VocaUpdate({
         </Suspense>
       </Layout.Content.Full>
       <Layout.Content.Left>
-        <VocaSearchList searchParams={params} />
+        <VocaSearchList searchParams={searchParams} />
       </Layout.Content.Left>
       <Layout.Content.Right>
-        <UpdateVoca />
+        <UpdateVoca vocaId={params.vocaId} />
       </Layout.Content.Right>
     </>
   );

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       // 'file' comes from the Blob or File API
       await uploadBytes(storageRef, thumbnail as Blob);
       const imagePath = await getDownloadURL(storageRef);
-      const imageName = await getDownloadURL(storageRef);
+      const imageName = fileName;
 
       const res = await addDoc(collection(db, 'banners'), {
         ...bannerObject,

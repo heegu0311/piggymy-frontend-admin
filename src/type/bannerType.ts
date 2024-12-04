@@ -10,6 +10,7 @@ export interface BannerRequestJson {
   moveVocaId: number | null;
   exposureStartDate: Dayjs;
   exposureEndDate: Dayjs;
+  createdDate: string;
   isUse: boolean;
 }
 
@@ -30,6 +31,7 @@ export interface BannerResponseJson {
 }
 
 export interface BannerFormValue {
+  createdDate: string;
   exposureDuration: Dayjs[];
   type: 'VOCA' | 'QUIZ';
   title: string;

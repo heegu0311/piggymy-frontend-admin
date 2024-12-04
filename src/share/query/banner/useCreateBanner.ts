@@ -21,6 +21,7 @@ export const createBanner = async (
     moveVocaId,
     exposureEndDate,
     exposureStartDate,
+    createdDate,
     image,
     isUse,
   } = request.data;
@@ -47,6 +48,7 @@ export const createBanner = async (
         isUse: isUse,
         exposureStartDate: exposureStartDate.format('YYYY-MM-DD'),
         exposureEndDate: exposureEndDate.format('YYYY-MM-DD'),
+        createdDate,
       }),
     ],
     { type: 'application/json' },

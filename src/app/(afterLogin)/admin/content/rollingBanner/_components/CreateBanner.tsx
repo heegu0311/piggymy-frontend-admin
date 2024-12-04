@@ -1,11 +1,15 @@
 'use client';
 
 import { useForm } from 'antd/es/form/Form';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
 import { useCreateBanner } from '@/share/query/banner/useCreateBanner';
 import { BannerFormValue } from '@/type/bannerType';
 
 import BannerForm from './BannerForm';
+
+dayjs.extend(utc);
 
 export default function CreateBanner() {
   const [form] = useForm();
@@ -17,6 +21,7 @@ export default function CreateBanner() {
         ...formValue,
         exposureEndDate: formValue.exposureDuration[1],
         exposureStartDate: formValue.exposureDuration[0],
+        createdDate: dayjs().format(),
       },
     });
   };

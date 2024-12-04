@@ -10,7 +10,7 @@ import { useGetBanner } from '@/share/query/banner/useGetBanner';
 import { useUpdateBanner } from '@/share/query/banner/useUpdateBanner';
 import { BannerFormValue } from '@/type/bannerType';
 
-import RollingBannerForm from './BannerForm';
+import BannerForm from './BannerForm';
 
 interface UpdateBannerProps {
   bannerId: number;
@@ -60,13 +60,13 @@ export default function UpdateBanner({ bannerId }: UpdateBannerProps) {
     } = data.data;
 
     return (
-      <RollingBannerForm
+      <BannerForm
         mode="update"
         form={form}
         onDelete={handleCancel}
         onSubmit={handleSubmit}
         initialValue={{
-          ...data.data,
+          ...data?.data,
           createdDate: dayjs(createdDate),
           modifiedDate: dayjs(modifiedDate),
           exposureStartDate: dayjs(exposureStartDate),

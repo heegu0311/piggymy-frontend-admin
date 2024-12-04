@@ -1,6 +1,6 @@
 import { QueryClient, useQuery } from '@tanstack/react-query';
 
-import { Request, Response } from '@/type/apiType';
+import { Request } from '@/type/apiType';
 import { BannerResponseJson } from '@/type/bannerType';
 
 import axiosInstance from '../axios';
@@ -12,11 +12,11 @@ interface GetBannerId {
 interface GetBannerResponse extends BannerResponseJson {}
 
 export const getBanner = async (request: Request<null, GetBannerId>) => {
-  const response = await axiosInstance.get<Response<GetBannerResponse>>(
+  const response = await axiosInstance.get<GetBannerResponse>(
     `/api/banners/${request.id?.bannerId}`,
   );
 
-  return response.data;
+  return response;
 };
 
 export function useGetBanner(request: Request<null, GetBannerId>) {

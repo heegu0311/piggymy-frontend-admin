@@ -6,19 +6,11 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   Timestamp,
 } from 'firebase/firestore';
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from 'firebase/storage';
 import { NextRequest, NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
 
-import { db, storage } from '@/app/db/firebaseConfig';
+import { db } from '@/app/db/firebaseConfig';
 import { fetchPaginatedData } from '@/share/firebase/firebase';
 import { formDataToObject } from '@/share/utils/converter';
 import { searchByKeyword } from '@/utils/algolia';
@@ -30,39 +22,17 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
-    const { thumbnail } = Object.fromEntries(formData);
-
-    const { voca } = formDataToObject(formData);
-    const vocaText = await voca.text();
-    const vocaObject = JSON.parse(vocaText);
+    const { quiz } = formDataToObject(formData);
+    const quizText = await quiz.text();
+    const quizObject = JSON.parse(quizText);
     const timestamp = Timestamp.fromDate(new Date());
 
-    if (thumbnail) {
-      // 고유한 파일명을 생성
-      const fileName = `${uuidv4()}.png`;
-      const storageRef = ref(storage, `/vocas/${fileName}`);
+    const res = await addDoc(collection(db, 'quizzes'), {
+      ...quizObject,
+      createdDate: timestamp,
+    });
 
-      // 'file' comes from the Blob or File API
-      await uploadBytes(storageRef, thumbnail as Blob);
-      const imagePath = await getDownloadURL(storageRef);
-      const imageName = fileName;
-
-      const res = await addDoc(collection(db, 'vocas'), {
-        ...vocaObject,
-        createdDate: timestamp,
-        imagePath,
-        imageName,
-      });
-
-      return NextResponse.json({ data: { id: res.id } }, { status: 201 });
-    } else {
-      const res = await addDoc(collection(db, 'vocas'), {
-        ...vocaObject,
-        createdDate: timestamp,
-      });
-
-      return NextResponse.json({ data: { id: res.id } }, { status: 201 });
-    }
+    return NextResponse.json({ data: { id: res.id } }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
   }
@@ -80,7 +50,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = await fetchPaginatedData(
-      'vocas',
+      'quizzes',
       searchParams,
       +pageSize!,
       +pageNumber!,
@@ -105,17 +75,7 @@ export async function DELETE(request: NextRequest) {
 
     await Promise.all(
       ids.map(async (id) => {
-        const docRef = doc(db, 'vocas', id);
-        const docSnap = await getDoc(docRef);
-        const vocaObject = docSnap.data() || {};
-
-        if (vocaObject.imagePath && vocaObject.imageName) {
-          // Delete the file
-          const storageRef = ref(storage, `/vocas/${vocaObject.imageName}`);
-          await deleteObject(storageRef);
-        }
-
-        await deleteDoc(doc(db, 'vocas', id));
+        await deleteDoc(doc(db, 'quizzes', id));
       }),
     );
 

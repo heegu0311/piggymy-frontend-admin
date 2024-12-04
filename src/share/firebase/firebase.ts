@@ -15,6 +15,7 @@ import {
 const db = getFirestore();
 
 export const fetchPaginatedData = async (
+  dataType: 'vocas' | 'quizzes',
   searchParams: URLSearchParams,
   pageSize: number,
   pageNumber: number,
@@ -39,7 +40,7 @@ export const fetchPaginatedData = async (
     limit(Number(pageSize)),
   ];
 
-  const collectionRef = collection(db, 'vocas');
+  const collectionRef = collection(db, dataType);
   let q = query(collectionRef, ...filters, limit(Number(pageSize)));
 
   // 특정 페이지로 이동하기 위해 필요한 커서를 계산

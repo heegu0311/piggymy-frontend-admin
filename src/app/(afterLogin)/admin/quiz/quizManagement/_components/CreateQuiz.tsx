@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 
 import QuizForm from '@/app/(afterLogin)/admin/quiz/quizManagement/_components/QuizForm';
 import { useCreateQuiz } from '@/share/query/quiz/useCreateQuiz';
-import { CreateQuizRequestJson, UpdateQuizRequestJson } from '@/type/quizType';
+import { QuizFormValue } from '@/type/quizType';
 
 export default function CreateQuiz() {
   const params = useParams();
@@ -18,10 +18,8 @@ export default function CreateQuiz() {
     form.resetFields();
   };
 
-  const handleFinish = (
-    formValue: CreateQuizRequestJson | UpdateQuizRequestJson,
-  ) => {
-    create({ data: formValue as CreateQuizRequestJson });
+  const handleFinish = (formValue: QuizFormValue) => {
+    create({ data: formValue });
     form.resetFields();
   };
 

@@ -8,17 +8,12 @@ import PageInfo from '../../../_components/PageInfo';
 import UpdateQuiz from '../_components/UpdateQuiz';
 
 export default async function QuizUpdate({
+  params,
   searchParams,
 }: {
+  params: { quizId: number };
   searchParams: { [key: string]: string | undefined };
 }) {
-  const params = {
-    start_date: searchParams['start_date'],
-    end_date: searchParams['end_date'],
-    is_use: searchParams['is_use'],
-    search_keyword: searchParams['search_keyword'],
-  };
-
   return (
     <>
       <Layout.Content.Full>
@@ -34,10 +29,10 @@ export default async function QuizUpdate({
       </Layout.Content.Full>
 
       <Layout.Content.Left>
-        <QuizSearchList searchParams={params} />
+        <QuizSearchList searchParams={searchParams} />
       </Layout.Content.Left>
       <Layout.Content.Right>
-        <UpdateQuiz />
+        <UpdateQuiz quizId={params.quizId} />
       </Layout.Content.Right>
     </>
   );

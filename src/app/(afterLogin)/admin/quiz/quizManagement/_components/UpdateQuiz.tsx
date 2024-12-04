@@ -1,32 +1,41 @@
 'use client';
 
 import { useForm } from 'antd/es/form/Form';
-import { useParams } from 'next/navigation';
+import dayjs from 'dayjs';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useMemo } from 'react';
 
 import QuizForm from '@/app/(afterLogin)/admin/quiz/quizManagement/_components/QuizForm';
 import { useGetQuiz } from '@/share/query/quiz/useGetQuiz';
 import { useUpdateQuiz } from '@/share/query/quiz/useUpdateQuiz';
-import { CreateQuizRequestJson, UpdateQuizRequestJson } from '@/type/quizType';
+import { QuizFormValue } from '@/type/quizType';
 
-export default function UpdateQuiz() {
+interface UpdateQuizProps {
+  quizId: number;
+}
+
+export default function UpdateQuiz({ quizId }: UpdateQuizProps) {
   const params = useParams();
+  const router = useRouter();
   const [form] = useForm();
 
-  const { data } = useGetQuiz(+params.quizId);
+  const { data, isError, isSuccess } = useGetQuiz({
+    id: { quizId },
+    data: null,
+  });
   const { mutate: update } = useUpdateQuiz();
 
   const initialValues = useMemo(
     () => ({
-      title: data?.title || '',
-      answer: data?.answer || '',
-      option1: data?.option1 || '',
-      option2: data?.option2 || '',
-      option3: data?.option3 || '',
-      option4: data?.option4 || '',
-      vocaId: data?.vocaId,
-      isUse: data?.isUse || false,
-      createdDate: data?.createdDate || '',
+      title: data?.data.title,
+      answer: data?.data.answer,
+      option1: data?.data.option1,
+      option2: data?.data.option2,
+      option3: data?.data.option3,
+      option4: data?.data.option4,
+      vocaId: data?.data.vocaId,
+      isUse: data?.data.isUse,
+      createdDate: data?.data.createdDate,
     }),
     [data],
   );
@@ -35,13 +44,11 @@ export default function UpdateQuiz() {
     form.setFieldsValue(initialValues);
   };
 
-  const handleFinish = (
-    formValue: CreateQuizRequestJson | UpdateQuizRequestJson,
-  ) => {
+  const handleFinish = (formValue: QuizFormValue) => {
     update({
-      id: +params.quizId,
+      id: { quizId: params.quizId as string },
       data: {
-        ...(formValue as UpdateQuizRequestJson),
+        ...formValue,
       },
     });
   };
@@ -52,12 +59,25 @@ export default function UpdateQuiz() {
     form.setFieldsValue(initialValues);
   }, [data, form, initialValues]);
 
-  return (
-    <QuizForm
-      initialValues={initialValues}
-      form={form}
-      onCancel={handleCancel}
-      onFinish={handleFinish}
-    />
-  );
+  useEffect(() => {
+    if (isError) {
+      router.push('/admin/quiz/quizManagement');
+    }
+  }, [isError, router]);
+
+  if (isSuccess) {
+    const { createdDate } = data.data;
+
+    return (
+      <QuizForm
+        initialValues={{
+          ...data.data,
+          createdDate: dayjs(createdDate),
+        }}
+        form={form}
+        onCancel={handleCancel}
+        onFinish={handleFinish}
+      />
+    );
+  }
 }

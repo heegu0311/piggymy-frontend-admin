@@ -3,16 +3,38 @@ import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
 
 import { Request, Response } from '@/type/apiType';
-import { UpdateQuizRequestJson } from '@/type/quizType';
+import { QuizRequestJson } from '@/type/quizType';
 
 import axiosInstance from '../axios';
 
+interface UpdateQuizId {
+  quizId: string;
+}
+
+interface UpdateQuizRequestJson extends QuizRequestJson {
+  imagePath?: string;
+  imageName?: string;
+}
+
 export const updateQuiz = async (
-  request: Request<UpdateQuizRequestJson, number>,
+  request: Request<UpdateQuizRequestJson, UpdateQuizId>,
 ) => {
+  const formData = new FormData();
+
+  const quizBlob = new Blob([JSON.stringify(request.data)], {
+    type: 'application/json',
+  });
+
+  formData.append('quiz', quizBlob);
+
   const response = await axiosInstance.put<Response<number>>(
-    `/api/quizzes/${request.id}`,
-    request.data,
+    `/api/quizzes/${request.id?.quizId}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
   );
 
   return response.data;

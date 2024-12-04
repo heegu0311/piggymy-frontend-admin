@@ -1,29 +1,19 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { Form, Pagination } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import React, {
-  ChangeEvent,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 
 import Text from '@/share/form/item/Text';
 import NoticeModal from '@/share/modal/NoticeModal';
 import { useModal } from '@/share/modal/useModal';
 import { useDeleteQuizzes } from '@/share/query/quiz/useDeleteQuizzes';
-import {
-  prefetchQuizList,
-  useGetQuizList,
-} from '@/share/query/quiz/useGetQuizList';
+import { useGetQuizList } from '@/share/query/quiz/useGetQuizList';
 import { usePatchQuizzesIsUse } from '@/share/query/quiz/useUpdateQuiz';
 import Button from '@/share/ui/button/Button';
 import IconButton from '@/share/ui/button/IconButton';
 import ContentBox from '@/share/ui/content-box/ContentBox';
-import Dropdown from '@/share/ui/dropdown/Dropdown';
 import Icon from '@/share/ui/icon/Icon';
 import Add from '@/share/ui/list-item/Add';
 import Card from '@/share/ui/list-item/Card';
@@ -51,20 +41,19 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
   const router = useRouter();
   const path = usePathname();
   const { openModal, closeModal } = useModal();
-  const queryClient = useQueryClient();
 
   const [selectQuizList, setSelectQuizList] = useState<QuizModel[]>([]);
   const [page, setPage] = useState(1);
-  const [sortType, setSortType] = useState<'CREATED' | 'MODIFIED'>('CREATED');
+  // const [sortType, setSortType] = useState<'CREATED' | 'MODIFIED'>('CREATED');
 
   const selectQuizIds = selectQuizList.map((quiz) => quiz.id);
   const selectQuizIsUseValues = selectQuizList.map((quiz) => quiz.isUse);
 
-  const { data } = useGetQuizList({
+  const { data, refetch } = useGetQuizList({
     data: {
       page,
       page_size: 10,
-      sort_type: sortType,
+      // sort_type: sortType,
       ...searchParams,
     },
   });
@@ -75,15 +64,8 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
   const quizList = data?.data.list ?? [];
 
   useEffect(() => {
-    prefetchQuizList(queryClient, {
-      data: {
-        page: page + 1,
-        page_size: 10,
-        sort_type: sortType,
-        ...searchParams,
-      },
-    }).then();
-  }, [page, sortType, queryClient, searchParams]);
+    refetch().then();
+  }, [page, refetch]);
 
   const handleFinish = (formValue: FormExampleValue) => {
     const params = {
@@ -175,15 +157,17 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
           <Title>
             전체 퀴즈 <Title.H>{totalCount}</Title.H>건
           </Title>
-          <Dropdown
-            options={[
-              { inputVal: 'CREATED', summary: '등록일' },
-              { inputVal: 'MODIFIED', summary: '업데이트순' },
-            ]}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              setSortType(e.target.value as 'CREATED' | 'MODIFIED');
-            }}
-          />
+          {/*
+            <Dropdown
+              options={[
+                { inputVal: 'CREATED', summary: '등록일' },
+                { inputVal: 'MODIFIED', summary: '업데이트순' },
+              ]}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                setSortType(e.target.value as 'CREATED' | 'MODIFIED');
+              }}
+            />
+          */}
         </div>
         <div className="flex items-center justify-between gap-4">
           <Button

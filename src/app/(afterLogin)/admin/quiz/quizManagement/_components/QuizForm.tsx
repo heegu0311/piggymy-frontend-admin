@@ -10,12 +10,12 @@ import Label from '@/share/form/item/Label';
 import VocaSelect from '@/share/form/item/VocaSelect';
 import Button from '@/share/ui/button/Button';
 import ContentBox from '@/share/ui/content-box/ContentBox';
-import { CreateQuizRequestJson, UpdateQuizRequestJson } from '@/type/quizType';
+import { QuizFormValue, UpdateQuizRequestJson } from '@/type/quizType';
 
 interface QuizFormProps {
   initialValues?: UpdateQuizRequestJson;
   form: FormInstance;
-  onFinish: (formValue: CreateQuizRequestJson | UpdateQuizRequestJson) => void;
+  onFinish: (formValue: QuizFormValue) => void;
   onCancel: () => void;
 }
 

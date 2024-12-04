@@ -13,7 +13,7 @@ import ContentBox from '@/share/ui/content-box/ContentBox';
 import { UpdateVocaRequestJson, VocaFormValue } from '@/type/vocaType';
 
 interface VocaFormProps {
-  initialValues: UpdateVocaRequestJson;
+  initialValues?: UpdateVocaRequestJson;
   form: FormInstance;
   onFinish: (formValue: VocaFormValue) => void;
   onCancel: () => void;

@@ -16,6 +16,7 @@ export interface VocaRequestJson {
   image: UploadFile[];
   sourceName: string;
   sourceLink: string;
+  createdDate: string;
   isUse: false;
   quizId: string | null;
 }
@@ -55,7 +56,6 @@ export interface VocaResponseJson {
 export interface VocaModel extends VocaResponseJson {}
 
 export interface CreateVocaRequestJson {
-  vocaId: number;
   koreanTitle: string;
   englishTitle: string;
   koreanCategory: string;
@@ -89,7 +89,6 @@ export interface UpdateVocaRequestJson {
 }
 
 export interface VocaFormValue {
-  vocaId?: number;
   koreanTitle: string;
   englishTitle: string;
   koreanCategory: string;
@@ -101,5 +100,6 @@ export interface VocaFormValue {
   imageName: string;
   isUse: false;
   image: UploadFile[];
+  createdDate: string;
   quizId: string | null;
 }

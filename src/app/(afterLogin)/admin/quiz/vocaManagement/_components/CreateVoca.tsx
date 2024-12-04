@@ -6,7 +6,7 @@ import React, { useEffect, useMemo } from 'react';
 
 import VocaForm from '@/app/(afterLogin)/admin/quiz/vocaManagement/_components/VocaForm';
 import { useCreateVoca } from '@/share/query/voca/useCreateVoca';
-import { CreateVocaRequestJson, UpdateVocaRequestJson } from '@/type/vocaType';
+import { VocaFormValue } from '@/type/vocaType';
 
 export default function CreateVoca() {
   const [form] = useForm();
@@ -28,10 +28,8 @@ export default function CreateVoca() {
     form.resetFields();
   };
 
-  const handleFinish = (
-    formValue: CreateVocaRequestJson | UpdateVocaRequestJson,
-  ) => {
-    create({ data: formValue as CreateVocaRequestJson });
+  const handleFinish = (formValue: VocaFormValue) => {
+    create({ data: formValue });
     form.resetFields();
   };
 

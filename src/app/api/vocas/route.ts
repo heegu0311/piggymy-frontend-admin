@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '@/app/db/firebaseConfig';
 import { fetchPaginatedData } from '@/share/firebase/firebase';
 import { formDataToObject } from '@/share/utils/converter';
+import { searchByKeyword } from '@/utils/algolia';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -71,12 +72,18 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const pageNumber = searchParams.get('page');
   const pageSize = searchParams.get('page_size');
+  const searchKeyword = searchParams.get('search_keyword');
+
+  const { results: algoliaResults } = await searchByKeyword(
+    searchKeyword as string,
+  );
 
   try {
     const data = await fetchPaginatedData(
       searchParams,
       +pageSize!,
       +pageNumber!,
+      algoliaResults[0].hits,
     );
     return NextResponse.json(data, { status: 200 });
   } catch (error) {

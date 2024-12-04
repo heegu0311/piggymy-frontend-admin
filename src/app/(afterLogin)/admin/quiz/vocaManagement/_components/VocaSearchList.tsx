@@ -3,12 +3,7 @@
 import { Form, Pagination } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import React, {
-  ChangeEvent,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 
 import Text from '@/share/form/item/Text';
 import NoticeModal from '@/share/modal/NoticeModal';
@@ -19,7 +14,6 @@ import { usePatchVocasIsUse } from '@/share/query/voca/useUpdateVoca';
 import Button from '@/share/ui/button/Button';
 import IconButton from '@/share/ui/button/IconButton';
 import ContentBox from '@/share/ui/content-box/ContentBox';
-import Dropdown from '@/share/ui/dropdown/Dropdown';
 import Icon from '@/share/ui/icon/Icon';
 import Add from '@/share/ui/list-item/Add';
 import Card from '@/share/ui/list-item/Card';
@@ -50,7 +44,7 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
 
   const [selectVocaList, setSelectVocaList] = useState<VocaModel[]>([]);
   const [page, setPage] = useState(1);
-  const [sortType, setSortType] = useState<'CREATED' | 'MODIFIED'>('CREATED');
+  // const [sortType, setSortType] = useState<'CREATED' | 'MODIFIED'>('CREATED');
 
   const selectVocaIds = selectVocaList.map((voca) => voca.id);
   const selectVocaIsUseValues = selectVocaList.map((voca) => voca.isUse);
@@ -59,7 +53,7 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
     data: {
       page,
       page_size: 10,
-      sort_type: sortType,
+      // sort_type: sortType,
       ...searchParams,
     },
   });
@@ -163,15 +157,17 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
           <Title>
             전체 용어 <Title.H>{totalCount}</Title.H>건
           </Title>
-          <Dropdown
-            options={[
-              { inputVal: 'CREATED', summary: '등록일' },
-              { inputVal: 'MODIFIED', summary: '업데이트순' },
-            ]}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              setSortType(e.target.value as 'CREATED' | 'MODIFIED');
-            }}
-          />
+          {/*
+            <Dropdown
+              options={[
+                { inputVal: 'CREATED', summary: '등록일' },
+                { inputVal: 'MODIFIED', summary: '업데이트순' },
+              ]}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                setSortType(e.target.value as 'CREATED' | 'MODIFIED');
+              }}
+            />
+          */}
         </div>
         <div className="flex items-center justify-between gap-4">
           <Button

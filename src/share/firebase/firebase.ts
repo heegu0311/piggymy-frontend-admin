@@ -18,12 +18,16 @@ export const fetchPaginatedData = async (
   searchParams: URLSearchParams,
   pageSize: number,
   pageNumber: number,
+  algoliaResults: any,
 ) => {
   const startDate = searchParams.get('start_date');
   const endDate = searchParams.get('end_date');
   const isUse = searchParams.get('is_use');
 
+  const firestoreIds = algoliaResults.map((result: any) => result.objectID);
+
   const filters = [
+    ...(firestoreIds.length > 0 ? [where('__name__', 'in', firestoreIds)] : []),
     orderBy('createdDate'),
     ...(startDate
       ? [where('createdDate', '>=', Timestamp.fromDate(new Date(startDate)))]

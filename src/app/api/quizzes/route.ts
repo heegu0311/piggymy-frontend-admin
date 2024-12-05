@@ -90,3 +90,30 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll('id');
+
+    if (ids.length === 0) {
+      return NextResponse.json({ error: 'No IDs provided' }, { status: 400 });
+    }
+
+    await Promise.all(
+      ids.map(async (id) => {
+        await deleteDoc(doc(db, 'quizzes', id));
+      }),
+    );
+
+    return NextResponse.json(
+      { message: 'Resources deleted successfully', ids },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to patch resources' },
+      { status: 500 },
+    );
+  }
+}

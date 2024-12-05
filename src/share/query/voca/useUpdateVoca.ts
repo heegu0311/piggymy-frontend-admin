@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
 
+import { buildQueryStringForIds } from '@/share/utils/query';
 import { Request, Response } from '@/type/apiType';
 import { VocaRequestJson } from '@/type/vocaType';
 
@@ -100,12 +101,12 @@ export function useUpdateVoca() {
   });
 }
 
-export const patchIsUse = async (
-  updateIsUseData: Request<{ vocaIds: number[]; isUse: boolean }>,
+export const patch = async (
+  request: Request<{ vocaIds: number[]; attr: string; value: any }>,
 ) => {
   const response = await axiosInstance.patch<Response<null>>(
-    `/api/vocas/isuse`,
-    updateIsUseData.data,
+    `/api/vocas?${buildQueryStringForIds(request.data.vocaIds)}`,
+    request.data,
   );
 
   return response.data;
@@ -115,7 +116,7 @@ export function usePatchVocasIsUse() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: patchIsUse,
+    mutationFn: patch,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['vocas'] });
       notification.success({

@@ -82,20 +82,20 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
 
   const handleIsUseChange: MouseEventHandler = (e) => {
     e.preventDefault();
+    const isAllTrue = selectVocaIsUseValues.every((value) => value);
+    const isAllFalse = selectVocaIsUseValues.every((value) => !value);
 
-    if (
-      selectVocaIsUseValues.every((value) => value) ||
-      selectVocaIsUseValues.every((value) => !value)
-    ) {
+    if (isAllTrue || isAllFalse) {
       openModal(
         'isUseChange',
         <NoticeModal
-          message={`체크된 항목 ${selectVocaList.length}건이 있습니다.\n모두 ‘${selectVocaIsUseValues.every((value) => value) ? '미사용' : '사용'}'으로 변경하시겠습니까??`}
+          message={`체크된 항목 ${selectVocaList.length}건이 있습니다.\n모두 ‘${isAllTrue ? '미사용' : '사용'}'으로 변경하시겠습니까??`}
           onConfirm={() => {
             patchVocas({
               data: {
                 vocaIds: selectVocaIds,
-                isUse: !selectVocaIsUseValues.every((value) => value),
+                attr: 'isUse',
+                value: !isAllTrue,
               },
             });
             setSelectVocaList([]);

@@ -8,6 +8,7 @@ import {
   doc,
   getDoc,
   Timestamp,
+  updateDoc,
 } from 'firebase/firestore';
 import {
   deleteObject,
@@ -126,6 +127,37 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to delete resources' },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll('id');
+    const body = await request.json();
+
+    if (ids.length === 0) {
+      return NextResponse.json({ error: 'No IDs provided' }, { status: 400 });
+    }
+
+    await Promise.all(
+      ids.map(async (id) => {
+        const vocaRef = doc(db, 'vocas', id);
+        await updateDoc(vocaRef, {
+          [body.attr]: body.value,
+        });
+      }),
+    );
+
+    return NextResponse.json(
+      { message: 'Resources deleted successfully', ids },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to patch resources' },
       { status: 500 },
     );
   }

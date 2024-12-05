@@ -5,11 +5,14 @@ const client = searchClient(
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY as string,
 );
 
-export async function searchByKeyword(keyword: string): Promise<any> {
+export async function searchByKeyword(
+  index: string,
+  keyword: string,
+): Promise<any> {
   return await client.search({
     requests: [
       {
-        indexName: 'piggyme',
+        indexName: index,
         query: keyword,
       },
     ],

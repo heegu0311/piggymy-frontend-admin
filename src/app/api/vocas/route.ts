@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
   const searchKeyword = searchParams.get('search_keyword');
 
   const { results: algoliaResults } = await searchByKeyword(
+    'vocas',
     searchKeyword as string,
   );
 

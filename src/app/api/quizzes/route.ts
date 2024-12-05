@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   Timestamp,
+  updateDoc,
 } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -95,6 +96,7 @@ export async function PATCH(request: Request) {
   try {
     const url = new URL(request.url);
     const ids = url.searchParams.getAll('id');
+    const body = await request.json();
 
     if (ids.length === 0) {
       return NextResponse.json({ error: 'No IDs provided' }, { status: 400 });
@@ -102,7 +104,10 @@ export async function PATCH(request: Request) {
 
     await Promise.all(
       ids.map(async (id) => {
-        await deleteDoc(doc(db, 'quizzes', id));
+        const quizRef = doc(db, 'quizzes', id);
+        await updateDoc(quizRef, {
+          [body.attr]: body.value,
+        });
       }),
     );
 

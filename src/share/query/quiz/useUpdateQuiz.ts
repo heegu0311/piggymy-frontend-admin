@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import axios, { AxiosError } from 'axios';
 
+import { buildQueryStringForIds } from '@/share/utils/query';
 import { Request, Response } from '@/type/apiType';
 import { QuizRequestJson } from '@/type/quizType';
 
@@ -63,11 +64,11 @@ export function useUpdateQuiz() {
   });
 }
 
-export const patchIsUse = async (
-  request: Request<{ quizIds: number[]; isUse: boolean }>,
+export const patch = async (
+  request: Request<{ quizIds: number[]; attr: string; value: any }>,
 ) => {
   const response = await axiosInstance.patch<Response<null>>(
-    `/api/quizzes/isuse`,
+    `/api/quizzes?${buildQueryStringForIds(request.data.quizIds)}`,
     request.data,
   );
 
@@ -78,7 +79,7 @@ export function usePatchQuizzesIsUse() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: patchIsUse,
+    mutationFn: patch,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['quizzes'] });
       notification.success({

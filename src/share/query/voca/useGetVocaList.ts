@@ -1,4 +1,5 @@
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import { Request, Response } from '@/type/apiType';
 import { VocaListResponseJson } from '@/type/vocaType';
@@ -38,18 +39,21 @@ export const getVocaList = async (
 };
 
 export function useGetVocaList(request: Request<GetVocaListRequestQuery>) {
-  return useQuery({
+  return useQuery<
+    Response<VocaListResponseJson>,
+    AxiosError<{ error: string }>
+  >({
     queryKey: ['vocas', request?.data],
     queryFn: () => getVocaList(request),
   });
 }
 
-export function prefetchVocaList(
-  queryClient: QueryClient,
-  request: Request<GetVocaListRequestQuery>,
-) {
-  return queryClient.prefetchQuery({
-    queryKey: ['vocas', request?.data],
-    queryFn: () => getVocaList(request),
-  });
-}
+// export function prefetchVocaList(
+//   queryClient: QueryClient,
+//   request: Request<GetVocaListRequestQuery>,
+// ) {
+//   return queryClient.prefetchQuery({
+//     queryKey: ['vocas', request?.data],
+//     queryFn: () => getVocaList(request),
+//   });
+// }

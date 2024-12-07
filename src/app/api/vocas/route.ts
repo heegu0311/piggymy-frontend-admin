@@ -89,10 +89,21 @@ export async function GET(request: NextRequest) {
       algoliaResults[0].hits,
     );
     return NextResponse.json(data, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({
-      data: { error: 'Failed to fetch paginated data' },
-    });
+  } catch (error: any) {
+    if (error.name === 'FirebaseError' && error.message.includes('Equality')) {
+      return NextResponse.json(
+        {
+          error: '키워드 검색과 필터 설정은 동시에 사용할 수 없습니다.',
+        },
+        { status: 400 },
+      );
+    }
+    return NextResponse.json(
+      {
+        error: '용어 목록 불러오는데 실패했습니다.',
+      },
+      { status: 400 },
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { Form, Pagination } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Form, notification, Pagination, Spin } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
@@ -36,6 +37,12 @@ interface QuizSearchListProps {
   };
 }
 
+notification.config({
+  placement: 'topRight', // 알림 위치
+  duration: 3, // 자동 닫힘 시간 (초)
+  maxCount: 1, // RTL 모드 비활성화
+});
+
 function QuizSearchList({ searchParams }: QuizSearchListProps) {
   const { quizId } = useParams();
   const router = useRouter();
@@ -49,7 +56,7 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
   const selectQuizIds = selectQuizList.map((quiz) => quiz.id);
   const selectQuizIsUseValues = selectQuizList.map((quiz) => quiz.isUse);
 
-  const { data, refetch } = useGetQuizList({
+  const { data, refetch, isError, error, isLoading } = useGetQuizList({
     data: {
       page,
       page_size: 10,
@@ -137,11 +144,16 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
     }
   };
 
+  if (isError) {
+    notification.error({ message: error.response?.data.error });
+  }
+
   return (
     <ContentBox className={'flex h-full items-start'}>
       <Form
         className={'flex h-full w-full flex-col gap-4'}
         onFinish={handleFinish}
+        initialValues={{ keyword: searchParams.search_keyword }}
       >
         <div className={'flex w-full items-start justify-between gap-x-3'}>
           <Text
@@ -196,22 +208,30 @@ function QuizSearchList({ searchParams }: QuizSearchListProps) {
               'flex min-h-[calc(94px*11)] flex-col gap-4 overflow-y-auto pb-20'
             }
           >
-            {quizList?.map((quiz: QuizModel) => {
-              return (
-                <li key={quiz.id} className={'list-none'}>
-                  <Card
-                    id={quiz.id.toString()}
-                    koreanTitle={quiz.title}
-                    createdDate={dayjs(quiz.createdDate).format('YYYY-MM-DD')}
-                    isActive={quiz.isUse}
-                    isChecked={selectQuizIds.includes(quiz.id)}
-                    route={`/admin/quiz/quizManagement/${quiz.id}`}
-                    isSelected={+quizId === quiz.id}
-                    onChangeChecked={() => toggleCheck(quiz)}
-                  />
-                </li>
-              );
-            })}
+            {isLoading ? (
+              <div
+                className={'flex min-h-16 w-full items-center justify-center'}
+              >
+                <Spin indicator={<LoadingOutlined spin />} size="large" />
+              </div>
+            ) : (
+              quizList?.map((quiz: QuizModel) => {
+                return (
+                  <li key={quiz.id} className={'list-none'}>
+                    <Card
+                      id={quiz.id.toString()}
+                      koreanTitle={quiz.title}
+                      createdDate={dayjs(quiz.createdDate).format('YYYY-MM-DD')}
+                      isActive={quiz.isUse}
+                      isChecked={selectQuizIds.includes(quiz.id)}
+                      route={`/admin/quiz/quizManagement/${quiz.id}?${buildQueryString(searchParams)}`}
+                      isSelected={+quizId === quiz.id}
+                      onChangeChecked={() => toggleCheck(quiz)}
+                    />
+                  </li>
+                );
+              })
+            )}
           </ul>
           <div className={'absolute bottom-0'}>
             <Add

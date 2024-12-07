@@ -1,6 +1,7 @@
 'use client';
 
-import { Form, Pagination } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Form, notification, Pagination, Spin } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
@@ -36,6 +37,12 @@ interface VocaSearchListProps {
   };
 }
 
+notification.config({
+  placement: 'topRight', // 알림 위치
+  duration: 3, // 자동 닫힘 시간 (초)
+  maxCount: 1, // RTL 모드 비활성화
+});
+
 function VocaSearchList({ searchParams }: VocaSearchListProps) {
   const { vocaId } = useParams();
   const router = useRouter();
@@ -49,7 +56,7 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
   const selectVocaIds = selectVocaList.map((voca) => voca.id);
   const selectVocaIsUseValues = selectVocaList.map((voca) => voca.isUse);
 
-  const { data, refetch } = useGetVocaList({
+  const { data, refetch, isError, error, isLoading } = useGetVocaList({
     data: {
       page,
       page_size: 10,
@@ -136,11 +143,16 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
     }
   };
 
+  if (isError) {
+    notification.error({ message: error.response?.data.error });
+  }
+
   return (
     <ContentBox className={'flex h-full items-start'}>
       <Form
         className={'flex h-full w-full flex-col gap-4'}
         onFinish={handleFinish}
+        initialValues={{ keyword: searchParams.search_keyword }}
       >
         <div className={'flex w-full items-start justify-between gap-x-3'}>
           <Text
@@ -195,24 +207,32 @@ function VocaSearchList({ searchParams }: VocaSearchListProps) {
               'flex min-h-[calc(94px*11)] flex-col gap-4 overflow-y-auto pb-20'
             }
           >
-            {vocaList?.map((voca: VocaModel) => {
-              return (
-                <li key={voca.id} className={'list-none'}>
-                  <Card
-                    id={voca.id.toString()}
-                    koreanTitle={voca.koreanTitle}
-                    createdDate={dayjs(voca.createdDate).format('YYYY-MM-DD')}
-                    isActive={voca.isUse}
-                    isChecked={selectVocaList
-                      .map((voca) => voca.id)
-                      .includes(voca.id)}
-                    route={`/admin/quiz/vocaManagement/${voca.id}`}
-                    isSelected={+vocaId === voca.id}
-                    onChangeChecked={() => toggleCheck(voca)}
-                  />
-                </li>
-              );
-            })}
+            {isLoading ? (
+              <div
+                className={'flex min-h-16 w-full items-center justify-center'}
+              >
+                <Spin indicator={<LoadingOutlined spin />} size="large" />
+              </div>
+            ) : (
+              vocaList?.map((voca: VocaModel) => {
+                return (
+                  <li key={voca.id} className={'list-none'}>
+                    <Card
+                      id={voca.id.toString()}
+                      koreanTitle={voca.koreanTitle}
+                      createdDate={dayjs(voca.createdDate).format('YYYY-MM-DD')}
+                      isActive={voca.isUse}
+                      isChecked={selectVocaList
+                        .map((voca) => voca.id)
+                        .includes(voca.id)}
+                      route={`/admin/quiz/vocaManagement/${voca.id}?${buildQueryString(searchParams)}`}
+                      isSelected={+vocaId === voca.id}
+                      onChangeChecked={() => toggleCheck(voca)}
+                    />
+                  </li>
+                );
+              })
+            )}
           </ul>
           <div className={'absolute bottom-0'}>
             <Add

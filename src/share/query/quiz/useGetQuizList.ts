@@ -1,4 +1,5 @@
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import { Request, Response } from '@/type/apiType';
 
@@ -48,18 +49,21 @@ export const getQuizList = async (
 };
 
 export function useGetQuizList(request: Request<GetQuizListRequestQuery>) {
-  return useQuery({
-    queryKey: ['quizzes', request?.data],
-    queryFn: () => getQuizList(request),
-  });
+  return useQuery<Response<GetQuizListResponse>, AxiosError<{ error: string }>>(
+    {
+      queryKey: ['quizzes', request?.data],
+      queryFn: () => getQuizList(request),
+      retry: 1,
+    },
+  );
 }
 
-export function prefetchQuizList(
-  queryClient: QueryClient,
-  request: Request<GetQuizListRequestQuery>,
-) {
-  return queryClient.prefetchQuery({
-    queryKey: ['quizzes', request?.data],
-    queryFn: () => getQuizList(request),
-  });
-}
+// export function prefetchQuizList(
+//   queryClient: QueryClient,
+//   request: Request<GetQuizListRequestQuery>,
+// ) {
+//   return queryClient.prefetchQuery({
+//     queryKey: ['quizzes', request?.data],
+//     queryFn: () => getQuizList(request),
+//   });
+// }

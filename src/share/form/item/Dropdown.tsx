@@ -21,7 +21,7 @@ function Dropdown({
 }: DropdownProps) {
   return (
     <Form.Item label={label && <Label>{label}</Label>} name={name} {...props}>
-      <Select placeholder={placeholder} className={'w-full'}>
+      <Select allowClear placeholder={placeholder} className={'w-full'}>
         {optionList.map((option: Option) => (
           <Select.Option key={option.id} value={option.value}>
             {option.label}

@@ -22,6 +22,7 @@ export const createVoca = async (vocaData: Request<CreateVocaRequestJson>) => {
     imagePath,
     isUse,
     image,
+    quizId,
   } = vocaData.data;
 
   const formData = new FormData();
@@ -49,6 +50,7 @@ export const createVoca = async (vocaData: Request<CreateVocaRequestJson>) => {
         imageName: imageName || '',
         imagePath: imagePath || '',
         isUse: isUse,
+        quizId: quizId || null,
       }),
     ],
     { type: 'application/json' },

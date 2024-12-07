@@ -32,6 +32,7 @@ export const updateVoca = async (
     imageName,
     isUse,
     image,
+    quizId,
   } = request.data;
 
   const formData = new FormData();
@@ -58,6 +59,7 @@ export const updateVoca = async (
         imagePath,
         imageName,
         isUse: isUse,
+        quizId: quizId || null,
       }),
     ],
     { type: 'application/json' },

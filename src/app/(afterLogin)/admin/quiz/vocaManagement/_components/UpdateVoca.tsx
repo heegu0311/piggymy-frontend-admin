@@ -38,7 +38,7 @@ export default function UpdateVoca({ vocaId }: UpdateVocaProps) {
       sourceLink: data?.data.sourceLink ?? '',
       createdDate: data?.data.createdDate ?? '',
       content: data?.data.content ?? '',
-      quizId: data?.data.quizId ?? null,
+      quizId: data?.data.quizId ?? undefined,
     }),
     [data],
   );

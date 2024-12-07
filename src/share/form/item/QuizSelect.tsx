@@ -26,6 +26,7 @@ export default function QuizSelect({ name, initialValue }: QuizSelectProps) {
         filterOption={filterOption}
         placeholder="퀴즈카드를 선택해주세요."
         loading={isLoading}
+        allowClear
       >
         {data?.data &&
           data?.data.list.map((quiz) => (

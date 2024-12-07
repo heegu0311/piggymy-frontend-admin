@@ -33,9 +33,9 @@ export default function UpdateQuiz({ quizId }: UpdateQuizProps) {
       option2: data?.data.option2,
       option3: data?.data.option3,
       option4: data?.data.option4,
-      vocaId: data?.data.vocaId,
       isUse: data?.data.isUse,
       createdDate: data?.data.createdDate,
+      vocaId: data?.data.vocaId || undefined,
     }),
     [data],
   );

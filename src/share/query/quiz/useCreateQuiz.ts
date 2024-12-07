@@ -32,7 +32,6 @@ export const createQuiz = async (quizData: Request<CreateQuizRequestJson>) => {
   const quizBlob = new Blob(
     [
       JSON.stringify({
-        vocaId: vocaId || '가나다',
         title: title || '',
         answer: answer || 'ㄱ',
         option1: option1 || 'a',
@@ -40,6 +39,7 @@ export const createQuiz = async (quizData: Request<CreateQuizRequestJson>) => {
         option3: option3 || '',
         option4: option4 || '',
         isUse: isUse || '',
+        vocaId: vocaId || null,
       }),
     ],
     { type: 'application/json' },

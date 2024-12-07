@@ -26,6 +26,7 @@ export default function VocaSelect({ name, initialValue }: VocaSelectProps) {
         filterOption={filterOption}
         placeholder="용어카드를 선택해주세요."
         loading={isLoading}
+        allowClear
       >
         {data?.data &&
           data?.data.list.map((voca) => (

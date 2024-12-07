@@ -22,9 +22,12 @@ export const updateQuiz = async (
 ) => {
   const formData = new FormData();
 
-  const quizBlob = new Blob([JSON.stringify(request.data)], {
-    type: 'application/json',
-  });
+  const quizBlob = new Blob(
+    [JSON.stringify({ ...request.data, vocaId: request.data.vocaId || null })],
+    {
+      type: 'application/json',
+    },
+  );
 
   formData.append('quiz', quizBlob);
 

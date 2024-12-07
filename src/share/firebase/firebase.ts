@@ -29,6 +29,11 @@ export const fetchPaginatedData = async (
 
   const filters = [
     ...(firestoreIds.length > 0 ? [where('__name__', 'in', firestoreIds)] : []),
+    /*
+     * 참고 : 불평등 조건(Inequality)과 동등 조건(Equality)을 함께 쓰면 firestore invalid query임
+     * 페이지네이션까지 정상동작하게끔 할 수 있는 방안을 찾아봐야함.
+     * 일단 클라이언트 filter 설정관련 에러메시지를 추가하는 방식으로 처리
+     */
     orderBy('createdDate'),
     ...(startDate
       ? [where('createdDate', '>=', Timestamp.fromDate(new Date(startDate)))]
